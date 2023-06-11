@@ -4,6 +4,7 @@
 #include "Main.h"
 
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -23,6 +24,16 @@ AMain::AMain()
 
 	MouseSensitivity = 65.f;
 
+	// Make independent player rotation of mouse input
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate through movement direction ... 
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 650.f, 0.f); // ... at this rate
+	GetCharacterMovement()->JumpZVelocity = 650.f; // Designate jump velocity
+	GetCharacterMovement()->AirControl = 0.3f; // Direction control rate in the air
+	
 }
 
 // Called when the game starts or when spawned
