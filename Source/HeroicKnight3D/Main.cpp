@@ -21,8 +21,8 @@ AMain::AMain()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	BaseTurnRate = 65.f;
-	BaseLookUpRate = 65.f;
+	MouseSensitivity = 65.f;
+
 }
 
 // Called when the game starts or when spawned
@@ -36,8 +36,7 @@ void AMain::BeginPlay()
 void AMain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FRotator PlayerRotation = GetActorRotation();
-	FRotator ControlRotation = Controller->GetControlRotation();
+	
 }
 
 // Called to bind functionality to input
@@ -45,11 +44,14 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	check(PlayerInputComponent)
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMain::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMain::MoveRight);
-	PlayerInputComponent->BindAxis("TurnRate", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("TurnRate", this, &AMain::TurnAtRate);
+	PlayerInputComponent->BindAxis("LookUpRate", this, &AMain::LookUpRate);
 }
 
 void AMain::MoveForward(float InputValue)
@@ -76,17 +78,15 @@ void AMain::MoveRight(float InputValue)
 	}
 } 
 
-/*
 void AMain::TurnAtRate(float Rate)
 {
-	float TurnAtRate = Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds();
+	float TurnAtRate = Rate * MouseSensitivity * GetWorld()->GetDeltaSeconds();
 	AddControllerYawInput(TurnAtRate);
 }
 
 void AMain::LookUpRate(float Rate)
 {
-	float LookUpRate = Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds();
+	float LookUpRate = Rate * MouseSensitivity * GetWorld()->GetDeltaSeconds();
 	AddControllerPitchInput(LookUpRate);
 }
-*/
 
