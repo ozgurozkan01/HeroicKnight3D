@@ -29,10 +29,10 @@ AMain::AMain()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate through movement direction ... 
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Arrange rotation through movement direction ... 
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 650.f, 0.f); // ... at this rate
 	GetCharacterMovement()->JumpZVelocity = 650.f; // Designate jump velocity
-	GetCharacterMovement()->AirControl = 0.3f; // Direction control rate in the air
+	GetCharacterMovement()->AirControl = 0.3f; // rate of direction control of player in the air
 	
 }
 
@@ -40,14 +40,12 @@ AMain::AMain()
 void AMain::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AMain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
 
 // Called to bind functionality to input
