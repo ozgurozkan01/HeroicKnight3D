@@ -14,6 +14,8 @@ AFloorSwitch::AFloorSwitch()
 
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	RootComponent = TriggerBox;
+
+	TriggerBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	
 	FloorSwitch = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FloorSwitch"));
 	FloorSwitch->SetupAttachment(GetRootComponent());
