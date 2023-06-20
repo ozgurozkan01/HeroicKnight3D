@@ -14,6 +14,9 @@ AFloorSwitch::AFloorSwitch()
 
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	RootComponent = TriggerBox;
+
+	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapBegin);
+	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapEnd);
 	
 	FloorSwitch = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FloorSwitch"));
 	FloorSwitch->SetupAttachment(GetRootComponent());
@@ -26,7 +29,6 @@ AFloorSwitch::AFloorSwitch()
 void AFloorSwitch::BeginPlay()
 {
 	Super::BeginPlay();
-	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapBegin);
 }
 
 // Called every frame
@@ -44,5 +46,14 @@ void AFloorSwitch::OnOverlapBegin(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	
+	UE_LOG(LogTemp, Warning, TEXT("Overlap Begin!"));
+}
+
+void AFloorSwitch::OnOverlapEnd(
+	UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Overlap End!"));
 }
