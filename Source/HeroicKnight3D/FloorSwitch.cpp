@@ -19,6 +19,8 @@ AFloorSwitch::AFloorSwitch()
 	TriggerBox->SetCollisionObjectType(ECC_WorldStatic);
 	TriggerBox->SetCollisionResponseToAllChannels(ECR_Ignore);
 	TriggerBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+	TriggerBox->SetBoxExtent(FVector(62.f, 62.f, 32.f)); // Sizes of box
 	
 	FloorSwitch = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FloorSwitch"));
 	FloorSwitch->SetupAttachment(GetRootComponent());
