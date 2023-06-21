@@ -15,7 +15,7 @@ AFloorSwitch::AFloorSwitch()
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	RootComponent = TriggerBox;
 
-	TriggerBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	TriggerBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); 
 	TriggerBox->SetCollisionObjectType(ECC_WorldStatic);
 	TriggerBox->SetCollisionResponseToAllChannels(ECR_Ignore);
 	TriggerBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
