@@ -21,6 +21,11 @@ AFloorSwitch::AFloorSwitch()
 	TriggerBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
 	TriggerBox->SetBoxExtent(FVector(62.f, 62.f, 32.f)); // Sizes of box
+
+	/*	Hard Codding - Making in C++ what we can make in blueprint easily !!!
+	 *TriggerBox->SetGenerateOverlapEvents(true);
+	 *TriggerBox->SetLineThickness(5.f);
+	*/
 	
 	FloorSwitch = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FloorSwitch"));
 	FloorSwitch->SetupAttachment(GetRootComponent());
@@ -35,6 +40,9 @@ void AFloorSwitch::BeginPlay()
 	Super::BeginPlay();
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapBegin);
 	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapEnd);
+
+	InitialDoorLocation = Door->GetComponentLocation(); // Door is component of Trigger Box
+	InitialSwitchLocation = FloorSwitch->GetComponentLocation(); // Floor Switch is a component of Trigger Box
 }
 
 // Called every frame
@@ -52,7 +60,8 @@ void AFloorSwitch::OnOverlapBegin(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap Begin!"));
+	RaiseDoor();
+	LowerFloorSwitch();
 }
 
 void AFloorSwitch::OnOverlapEnd(
@@ -61,5 +70,20 @@ void AFloorSwitch::OnOverlapEnd(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap End!"));
+	LowerDoor();
+	RaiseFloorSwitch();
+}
+
+void AFloorSwitch::UpdateDoorLocation(float VectorZ)
+{
+	FVector NewLocation = InitialDoorLocation;
+	NewLocation.Z += VectorZ;
+	Door->SetWorldLocation(NewLocation);
+}
+
+void AFloorSwitch::UpdateSwitchLocation(float VectorZ)
+{
+	FVector NewLocation = InitialSwitchLocation;
+	NewLocation.Z += VectorZ;
+	FloorSwitch->SetWorldLocation(NewLocation);
 }

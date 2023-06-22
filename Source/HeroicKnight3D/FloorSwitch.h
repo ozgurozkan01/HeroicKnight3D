@@ -25,6 +25,12 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Floow Switch")
 	UStaticMeshComponent* Door;
+
+	UPROPERTY(BlueprintReadWrite, Category="Floor Switch")
+	FVector InitialDoorLocation;
+
+	UPROPERTY(BlueprintReadWrite, Category="Floor Switch")
+	FVector InitialSwitchLocation;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -36,5 +42,25 @@ public:
 	
 	UFUNCTION() // If we bind a function to the delegate It has to be UFUNCTION
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION() // If we bind a function to the delegate It has to be UFUNCTION
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
+	UFUNCTION(BlueprintImplementableEvent, Category="Floor Switch") // It is used for appropriate the function
+	void RaiseDoor();
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Floor Switch") // It is used for appropriate the function
+	void LowerDoor();
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Floor Switch") // It is used for appropriate the function
+	void RaiseFloorSwitch();
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Floor Switch") // It is used for appropriate the function
+	void LowerFloorSwitch();
+
+	UFUNCTION(BlueprintCallable, Category="Floor Switch")
+	void UpdateDoorLocation(float VectorZ);
+	
+	UFUNCTION(BlueprintCallable, Category="Floor Switch")
+	void UpdateSwitchLocation(float VectorZ);
 };
