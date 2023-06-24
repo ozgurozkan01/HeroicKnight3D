@@ -32,6 +32,9 @@ AFloorSwitch::AFloorSwitch()
 
 	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
 	Door->SetupAttachment(GetRootComponent());
+
+	SwitchDelayTime = 3.f;
+	bCharacterOnSwitch = false;
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +63,9 @@ void AFloorSwitch::OnOverlapBegin(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
+	// When it is pressed on the switch and it lowers, at the same time door raises.
+	if (!bCharacterOnSwitch) bCharacterOnSwitch = true;
+
 	RaiseDoor();
 	LowerFloorSwitch();
 }
@@ -70,8 +76,9 @@ void AFloorSwitch::OnOverlapEnd(
 	UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	LowerDoor();
-	RaiseFloorSwitch();
+	if (bCharacterOnSwitch) bCharacterOnSwitch = false;
+	
+	GetWorldTimerManager().SetTimer(SwitchHandle, this, &AFloorSwitch::CloseDoor, SwitchDelayTime);
 }
 
 void AFloorSwitch::UpdateDoorLocation(float VectorZ)
@@ -86,4 +93,14 @@ void AFloorSwitch::UpdateSwitchLocation(float VectorZ)
 	FVector NewLocation = InitialSwitchLocation;
 	NewLocation.Z += VectorZ;
 	FloorSwitch->SetWorldLocation(NewLocation);
+}
+
+void AFloorSwitch::CloseDoor()
+{
+	// When it is stoppped pressing on the switch and it raises, at the same time door lowers.
+	if (!bCharacterOnSwitch)
+	{
+		LowerDoor();
+		RaiseFloorSwitch();	
+	}
 }

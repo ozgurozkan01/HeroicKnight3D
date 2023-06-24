@@ -18,7 +18,7 @@ public:
 	AFloorSwitch();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Floow Switch")
-	UBoxComponent* TriggerBox;
+	UBoxComponent* TriggerBox; // It is created for Trigger Volume
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Floow Switch")
 	UStaticMeshComponent* FloorSwitch;
@@ -31,7 +31,11 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category="Floor Switch")
 	FVector InitialSwitchLocation;
-	
+
+	FTimerHandle SwitchHandle;
+
+	float SwitchDelayTime;
+	bool bCharacterOnSwitch;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -58,9 +62,13 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category="Floor Switch") // It is used for appropriate the function
 	void LowerFloorSwitch();
 
+	/* Set door location in every frame */
 	UFUNCTION(BlueprintCallable, Category="Floor Switch")
 	void UpdateDoorLocation(float VectorZ);
-	
+
+	/* Set switch location in every frame */
 	UFUNCTION(BlueprintCallable, Category="Floor Switch")
 	void UpdateSwitchLocation(float VectorZ);
+
+	void CloseDoor();
 };
