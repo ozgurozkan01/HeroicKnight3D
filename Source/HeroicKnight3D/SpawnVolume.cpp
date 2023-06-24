@@ -12,7 +12,7 @@ ASpawnVolume::ASpawnVolume()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	/*SpawnVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Spawn Volume"));*/
+	SpawnVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Spawn Volume"));
 	
 }
 
@@ -30,16 +30,14 @@ void ASpawnVolume::Tick(float DeltaTime)
 
 }
 
-/*
 FVector ASpawnVolume::GetSpawnPoint()
 {
 	FVector VolumeExtent = SpawnVolume->GetScaledBoxExtent();
 	FVector VolumeOrigin = SpawnVolume->GetComponentLocation();
 
-	/* This function is returning random point which is in SpawnVolume that we created #1#
+	/* This function is returning random point which is in SpawnVolume that we created */
 	FVector SpawnPoint = UKismetMathLibrary::RandomPointInBoundingBox(VolumeOrigin, VolumeExtent);
 
 	return SpawnPoint;
 }
-*/
 

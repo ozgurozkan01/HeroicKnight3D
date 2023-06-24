@@ -17,8 +17,8 @@ public:
 	// Sets default values for this actor's properties
 	ASpawnVolume();
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Spawn Volume")
-	UBoxComponent* SpawnVolume;*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Spawn Volume")
+	UBoxComponent* SpawnVolume;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -28,7 +28,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	/*
 	UFUNCTION(BlueprintPure, Category="Spawn Volume")
-	FVector GetSpawnPoint();*/
+	FVector GetSpawnPoint();
 };
