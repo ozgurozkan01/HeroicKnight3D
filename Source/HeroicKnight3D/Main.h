@@ -47,4 +47,5 @@ private:
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess = "true"), Category="Camera")
 	float MouseSensitivity;
 
+	bool IsInAir;
 };

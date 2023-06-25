@@ -17,6 +17,7 @@ AMain::AMain()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 750.f;
 	CameraBoom->bUsePawnControlRotation = true; // Rotation of Pawn which is applied by Controller
+	CameraBoom->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
 	
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
@@ -32,7 +33,7 @@ AMain::AMain()
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Arrange rotation through movement direction ... 
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 650.f, 0.f); // ... at this rate
 	GetCharacterMovement()->JumpZVelocity = 650.f; // Designate jump velocity
-	GetCharacterMovement()->AirControl = 0.3f; // rate of direction control of player in the air
+	GetCharacterMovement()->AirControl = 0.1f; // rate of direction control of player in the air
 	
 }
 
@@ -65,11 +66,13 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AMain::MoveForward(float InputValue)
 {
-	if (Controller != nullptr && InputValue != 0.0f)
-	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+	if (Controller == nullptr || InputValue == 0.f) return;
+	
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
+	if (!GetMovementComponent()->IsFalling())
+	{
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, InputValue);
 	}
@@ -77,11 +80,13 @@ void AMain::MoveForward(float InputValue)
 
 void AMain::MoveRight(float InputValue)
 {
-	if (Controller != nullptr && InputValue != 0.0f)
-	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+	if (Controller == nullptr || InputValue == 0.f) return;
 
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+	if (!GetMovementComponent()->IsFalling())
+	{
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, InputValue);
 	}
