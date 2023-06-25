@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SpawnVolume.generated.h"
 
+class AMyPawn;
 class UBoxComponent;
 
 UCLASS()
@@ -17,8 +18,14 @@ public:
 	// Sets default values for this actor's properties
 	ASpawnVolume();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Spawn Volume")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Spawning")
 	UBoxComponent* SpawnVolume;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Spawning")
+	TSubclassOf<AMyPawn> PawnToSpawn;
+
+	UPROPERTY(EditDefaultsOnly, Category="Spawning")
+	UParticleSystem* SpawningParticleEffect;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -28,6 +35,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintPure, Category="Spawn Volume")
+	UFUNCTION(BlueprintPure, Category="Spawning")
 	FVector GetSpawnPoint();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Spawning")
+	void SpawnOurPawn(UClass* SpawnedPawn, const FVector& Location);
+
+	UFUNCTION(BlueprintCallable, Category="Spawning")
+	void PawnSpawnedEffect(const FVector& Location);
 };

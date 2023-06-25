@@ -3,8 +3,11 @@
 
 #include "SpawnVolume.h"
 
+#include "MyPawn.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+
 
 // Sets default values
 ASpawnVolume::ASpawnVolume()
@@ -20,7 +23,7 @@ ASpawnVolume::ASpawnVolume()
 void ASpawnVolume::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	SpawnOurPawn(PawnToSpawn, GetSpawnPoint());
 }
 
 // Called every frame
@@ -41,3 +44,16 @@ FVector ASpawnVolume::GetSpawnPoint()
 	return SpawnPoint;
 }
 
+void ASpawnVolume::PawnSpawnedEffect(const FVector& Location)
+{
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SpawningParticleEffect, Location, FRotator::ZeroRotator);
+}
+
+void ASpawnVolume::SpawnOurPawn_Implementation(UClass* SpawnedPawn, const FVector& Location)
+{
+	UWorld* GameWorld = GetWorld();
+
+	if(SpawnedPawn == nullptr || GameWorld == nullptr) return;
+	
+	GameWorld->SpawnActor<AMyPawn>(PawnToSpawn, Location, FRotator::ZeroRotator);
+}
