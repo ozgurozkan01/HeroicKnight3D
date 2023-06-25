@@ -40,7 +40,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Spawning")
 	void SpawnOurPawn(UClass* SpawnedPawn, const FVector& Location);
-
+	
 	UFUNCTION(BlueprintCallable, Category="Spawning")
 	void PawnSpawnedEffect(const FVector& Location);
 };
