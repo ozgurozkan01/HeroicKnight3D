@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Item.generated.h"
 
+class USoundCue;
 class USphereComponent;
 
 UCLASS()
@@ -17,8 +18,22 @@ public:
 	// Sets default values for this actor's properties
 	AItem();
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Item | Collision")
 	USphereComponent* CollisionVolume;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Item | Mesh")
+	UStaticMeshComponent* ItemMesh;
+
+	/* Components needs to be constructed with CreateDefaultSubObject */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Item | Particles")
+	UParticleSystemComponent* IdleParticle;
+
+	/* If class is not component, then it does not need to be constructed */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Particles")
+	UParticleSystem* OverlapParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Sounds")
+	USoundCue* OverlapSound;
 	
 protected:
 	// Called when the game starts or when spawned
