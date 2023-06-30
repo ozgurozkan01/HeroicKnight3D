@@ -14,7 +14,7 @@ AFloatingPlatform::AFloatingPlatform()
 	
 	StartPoint = FVector(0.f);
 	EndPoint = FVector(0.f);
-	InterpSpeed = 2.f;
+	InterpSpeed = 4.f;
 	InterpTime = 1.f;
 	
 	bInterping = false;
@@ -48,7 +48,7 @@ void AFloatingPlatform::Tick(float DeltaTime)
 
 		float TraveledDistance = (GetActorLocation() - StartPoint).Size();
 
-		if(Distance - TraveledDistance <= 0.1f)
+		if(Distance - TraveledDistance <= 1.f)
 		{
 			ToggleInterping();
 			GetWorldTimerManager().SetTimer(InterpTimerHandle, this, &AFloatingPlatform::ToggleInterping, InterpTime);
