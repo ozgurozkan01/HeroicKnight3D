@@ -34,7 +34,12 @@ AMain::AMain()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 650.f, 0.f); // ... at this rate
 	GetCharacterMovement()->JumpZVelocity = 650.f; // Designate jump velocity
 	GetCharacterMovement()->AirControl = 0.1f; // rate of direction control of player in the air
-	
+
+	MaxHealth = 100.f;
+	MaxStamina = 350.f;
+	CurrentHealth = 70.f;
+	CurrentStamina = 125.f;
+	Coin = 0;
 }
 
 // Called when the game starts or when spawned

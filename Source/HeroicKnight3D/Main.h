@@ -36,6 +36,22 @@ public:
 
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
+	float MaxHealth;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
+	float MaxStamina;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
+	float CurrentHealth;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
+	float CurrentStamina;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
+	int32 Coin;
+	
 private:
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess = "true"), Category="Camera")
