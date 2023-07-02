@@ -22,6 +22,8 @@ AItem::AItem()
 
 	IdleParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Idle Particle"));
 	IdleParticle->SetupAttachment(GetRootComponent());
+
+	RotationRate = 55.f;
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +40,7 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	ItemRotation();
 }
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -58,3 +61,10 @@ void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Other
 	UE_LOG(LogTemp, Warning, TEXT("Super::OnOverlapEnd()"));
 }
 
+
+void AItem::ItemRotation()
+{
+	FRotator CurrentRotation = GetActorRotation();
+	CurrentRotation.Yaw += GetWorld()->GetDeltaSeconds() * RotationRate;
+	SetActorRotation(CurrentRotation);
+}

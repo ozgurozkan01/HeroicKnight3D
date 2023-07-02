@@ -34,6 +34,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Sounds")
 	USoundCue* OverlapSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Sounds")
+	float RotationRate;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -48,4 +51,5 @@ public:
 	UFUNCTION()
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	void ItemRotation();
 };
