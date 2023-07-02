@@ -34,6 +34,10 @@ public:
 	void TurnAtRate(float Rate);
 	void LookUpRate(float Rate);
 
+	void DecrementHealth(float TakenDamage);
+	void IncrementCoin(int32 TakenCoin);
+	void Die();
+	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
 

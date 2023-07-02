@@ -109,3 +109,24 @@ void AMain::LookUpRate(float Rate)
 	AddControllerPitchInput(LookUpRate);
 }
 
+void AMain::DecrementHealth(float TakenDamage)
+{
+	if (CurrentHealth <= 0.f)
+	{
+		Die();
+		return;
+	}
+
+	CurrentHealth -= TakenDamage;
+}
+
+void AMain::IncrementCoin(int32 TakenCoin)
+{
+	Coin += TakenCoin;
+}
+
+void AMain::Die()
+{
+	
+}
+
