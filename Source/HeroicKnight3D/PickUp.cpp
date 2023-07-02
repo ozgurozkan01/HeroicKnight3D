@@ -3,14 +3,25 @@
 
 #include "PickUp.h"
 
+#include "Main.h"
+
 APickUp::APickUp()
 {
+	PickedCoin = 1;
 }
 
 void APickUp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
+	if (OtherActor == nullptr) { return; }
+
+	AMain* MainPlayer = Cast<AMain>(OtherActor);
+
+	if(MainPlayer == nullptr) { return; }
+
+	MainPlayer->IncrementCoin(PickedCoin);
 }
 
 void APickUp::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
