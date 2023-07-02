@@ -39,11 +39,11 @@ public:
 	float RotationRate;
 	
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
+	
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
