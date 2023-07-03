@@ -9,6 +9,14 @@
 class UCameraComponent;
 class USpringArmComponent;
 
+UENUM(BlueprintType)
+enum class EMovementStatus : uint8
+{
+	EMS_Normal UMETA(DisplayName = "Normal"),
+	EMS_Sprinting UMETA(DisplayName = "Sprinting"),
+	EMS_MAX UMETA(DisplayName = "DefaultMAX") 
+};
+
 UCLASS()
 class HEROICKNIGHT3D_API AMain : public ACharacter
 {
@@ -33,7 +41,10 @@ public:
 	void MoveRight(float InputValue);
 	void TurnAtRate(float Rate);
 	void LookUpRate(float Rate);
+	void ShiftKeyDown();
+	void ShiftKeyUp();
 
+	void SetMovementStatus(EMovementStatus CurrentStatus);
 	void DecrementHealth(float TakenDamage);
 	void IncrementCoin(int32 TakenCoin);
 	void Die();
@@ -55,6 +66,16 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
 	int32 Coin;
+
+	EMovementStatus MovementStatus;
+	
+	bool bShiftKeyDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	float SprintingSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	float RunningSpeed;
 	
 private:
 
