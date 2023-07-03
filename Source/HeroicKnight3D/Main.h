@@ -18,7 +18,7 @@ enum class EMovementStatus : uint8
 };
 
 UENUM(BlueprintType)
-enum class EStaminaStatus
+enum class EStaminaStatus : uint8
 {
 	ESS_Normal UMETA(DisplayName = "Normal"),
 	ESS_BelowMinimum UMETA(DisplayName = "BelowMinimum"),
