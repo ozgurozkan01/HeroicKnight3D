@@ -17,6 +17,16 @@ enum class EMovementStatus : uint8
 	EMS_MAX UMETA(DisplayName = "DefaultMAX") 
 };
 
+UENUM(BlueprintType)
+enum class EStaminaStatus
+{
+	ESS_Normal UMETA(DisplayName = "Normal"),
+	ESS_BelowMinimum UMETA(DisplayName = "BelowMinimum"),
+	ESS_Exhausted UMETA(DisplayName = "Exhausted"),
+	ESS_ExhaustedRecoviring UMETA(DisplayName = "ExhaustedRecoviring"),
+	ESS_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
 UCLASS()
 class HEROICKNIGHT3D_API AMain : public ACharacter
 {
@@ -44,9 +54,11 @@ public:
 	void ShiftKeyDown();
 	void ShiftKeyUp();
 
+	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
 	void SetMovementStatus(EMovementStatus CurrentStatus);
 	void DecrementHealth(float TakenDamage);
 	void IncrementCoin(int32 TakenCoin);
+	void SetStaminaLevel();
 	void Die();
 	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
@@ -67,7 +79,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
 	int32 Coin;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats")
 	EMovementStatus MovementStatus;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats")
+	EStaminaStatus StaminaStatus;
 	
 	bool bShiftKeyDown;
 
@@ -76,6 +92,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
 	float RunningSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	float MinSprintStamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	float StaminaDrainRate;
 	
 private:
 

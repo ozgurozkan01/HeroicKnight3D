@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "MainAnimInstance.generated.h"
 
+class AMain;
 /**
  * 
  */
@@ -29,4 +30,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	APawn* Pawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
+	AMain* MainPlayer;
 };

@@ -41,10 +41,16 @@ AMain::AMain()
 	CurrentStamina = 125.f;
 	Coin = 0;
 
+	StaminaDrainRate = 25.f;
+	MinSprintStamina = 100.f;
+	
 	SprintingSpeed = 1000.f;
 	RunningSpeed = 600.f;
 	
 	bShiftKeyDown = false;
+
+	MovementStatus = EMovementStatus::EMS_Normal;
+	StaminaStatus = EStaminaStatus::ESS_Normal;
 }
 
 // Called when the game starts or when spawned
@@ -57,6 +63,8 @@ void AMain::BeginPlay()
 void AMain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	SetStaminaLevel();
 }
 
 // Called to bind functionality to input
@@ -74,6 +82,96 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMain::MoveRight);
 	PlayerInputComponent->BindAxis("TurnRate", this, &AMain::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AMain::LookUpRate);
+}
+
+void AMain::SetStaminaLevel()
+{
+	float DeltaStamina = GetWorld()->GetDeltaSeconds() * StaminaDrainRate;
+
+	switch (StaminaStatus)
+	{
+	case EStaminaStatus::ESS_Normal:
+
+		if (bShiftKeyDown)
+		{
+			if (CurrentStamina - DeltaStamina <= MinSprintStamina)
+			{
+				SetStaminaStatus(EStaminaStatus::ESS_BelowMinimum);
+			}
+			
+			CurrentStamina -= DeltaStamina;
+			SetMovementStatus(EMovementStatus::EMS_Sprinting);
+		}
+
+		else
+		{
+			if(CurrentStamina + DeltaStamina >= MaxStamina)
+			{
+				CurrentStamina = MaxStamina;
+			}
+
+			else
+			{
+				CurrentStamina += DeltaStamina;
+			}
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+		}
+		break;
+		
+	case EStaminaStatus::ESS_BelowMinimum:
+		if (bShiftKeyDown)
+		{
+			if (CurrentStamina - DeltaStamina <= 0)
+			{
+				SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
+				CurrentStamina = 0.f;
+				SetMovementStatus(EMovementStatus::EMS_Normal);
+			}
+
+			else
+			{
+				CurrentStamina -= DeltaStamina;
+				SetMovementStatus(EMovementStatus::EMS_Sprinting);				
+			}
+		}
+
+		else
+		{
+			if (CurrentStamina + DeltaStamina >= MinSprintStamina)
+			{
+				SetStaminaStatus(EStaminaStatus::ESS_Normal);
+			}
+
+			CurrentStamina += DeltaStamina;
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+		}
+		break;
+	case EStaminaStatus::ESS_Exhausted:
+
+		if (bShiftKeyDown)
+		{
+			CurrentStamina = 0.f;
+		}
+
+		else
+		{
+			SetStaminaStatus(EStaminaStatus::ESS_ExhaustedRecoviring);
+			CurrentStamina += DeltaStamina;
+		}
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		break;
+	case EStaminaStatus::ESS_ExhaustedRecoviring:
+		 if (CurrentStamina + DeltaStamina >= MinSprintStamina)
+		{
+			SetStaminaStatus(EStaminaStatus::ESS_Normal);
+		}
+
+		CurrentStamina += DeltaStamina;
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		break;
+	default:
+		;
+	}
 }
 
 void AMain::MoveForward(float InputValue)
