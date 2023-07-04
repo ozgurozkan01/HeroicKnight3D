@@ -7,9 +7,7 @@
 #include "Weapon.generated.h"
 
 class AMain;
-/**
- * 
- */
+
 UCLASS()
 class HEROICKNIGHT3D_API AWeapon : public AItem
 {

@@ -54,5 +54,5 @@ void AWeapon::WeaponAttach(AMain* MainPlayer)
 	// We attached to weapon (this) to Socket (WeaponHolderSocket)
 	// In this here, we add MainPlayer->GetMesh() as second parameter.
 	// That refers to that the skeletal mesh which has weaponHolderSocket
-	//WeaponHolderSocket->AttachActor(this, MainPlayer->GetMesh());
+	WeaponHolderSocket->AttachActor(this, MainPlayer->GetMesh());
 }
