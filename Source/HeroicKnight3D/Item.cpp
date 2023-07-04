@@ -23,6 +23,7 @@ AItem::AItem()
 	IdleParticle->SetupAttachment(GetRootComponent());
 
 	RotationRate = 55.f;
+	bRotate = true;
 }
 
 void AItem::BeginPlay()
@@ -37,7 +38,10 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	ItemRotation();
+	if (bRotate)
+	{
+		ItemRotation();
+	}
 }
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

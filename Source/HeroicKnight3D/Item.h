@@ -35,8 +35,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Sounds")
 	USoundCue* OverlapSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Sounds")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Rotate")
 	float RotationRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Item | Rotate")
+	bool bRotate;
 	
 protected:
 
