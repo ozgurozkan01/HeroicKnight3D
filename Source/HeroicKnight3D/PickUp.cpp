@@ -22,6 +22,7 @@ void APickUp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 	if(MainPlayer == nullptr) { return; }
 
 	MainPlayer->IncrementCoin(PickedCoin);
+	Destroy();
 }
 
 void APickUp::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

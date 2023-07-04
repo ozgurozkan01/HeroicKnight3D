@@ -24,6 +24,7 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 	if (MainPlayer == nullptr) { return; }
 
 	MainPlayer->DecrementHealth(Damage);
+	Destroy();
 }
 
 void AExplosive::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Weapon.generated.h"
 
+class AMain;
 /**
  * 
  */
@@ -17,6 +18,11 @@ public:
 	
 	AWeapon();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
+	USkeletalMeshComponent* WeaponMesh;
+	
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
+
+	void WeaponAttach(AMain* MainPlayer);
 };
