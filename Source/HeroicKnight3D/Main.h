@@ -76,7 +76,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
 	float CurrentStamina;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Coin")
 	int32 Coin;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats")
@@ -85,12 +85,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats")
 	EStaminaStatus StaminaStatus;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShiftKeyDown;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	float SprintingSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	float RunningSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
@@ -98,7 +99,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
 	float StaminaDrainRate;
-	
+
 private:
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess = "true"), Category="Camera")
@@ -110,5 +111,5 @@ private:
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess = "true"), Category="Camera")
 	float MouseSensitivity;
 
-	bool IsInAir;
+	bool bIsInAir;
 };

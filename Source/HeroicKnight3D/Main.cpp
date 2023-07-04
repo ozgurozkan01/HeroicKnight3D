@@ -48,7 +48,7 @@ AMain::AMain()
 	RunningSpeed = 600.f;
 	
 	bShiftKeyDown = false;
-
+	
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
 }
