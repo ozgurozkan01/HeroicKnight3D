@@ -37,8 +37,8 @@ AMain::AMain()
 
 	MaxHealth = 100.f;
 	MaxStamina = 350.f;
-	CurrentHealth = 70.f;
-	CurrentStamina = 125.f;
+	CurrentHealth = MaxHealth;
+	CurrentStamina = MaxStamina;
 	Coin = 0;
 
 	StaminaDrainRate = 25.f;
