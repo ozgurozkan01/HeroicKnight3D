@@ -69,7 +69,8 @@ public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
-	FORCEINLINE void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
+	void SetEquippedWeapon(AWeapon* WeaponToSet);
+	FORCEINLINE AWeapon* GetEquippedWeapon() { return EquippedWeapon;}
 	FORCEINLINE void SetActiveOverlappingItem(AItem* ItemToSet) { ActiveOverlappingItem = ItemToSet; }
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
