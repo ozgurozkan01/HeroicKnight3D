@@ -9,6 +9,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class AWeapon;
+class AItem;
 
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
@@ -54,7 +55,10 @@ public:
 	void LookUpRate(float Rate);
 	void ShiftKeyDown();
 	void ShiftKeyUp();
+	void LMBDown();
+	void LMBUp();
 
+	
 	void SetMovementStatus(EMovementStatus CurrentStatus);
 	void SetStaminaLevel();
 	
@@ -66,6 +70,7 @@ public:
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
 	FORCEINLINE void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
+	FORCEINLINE void SetActiveOverlappingItem(AItem* ItemToSet) { ActiveOverlappingItem = ItemToSet; }
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
@@ -88,12 +93,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats")
 	EStaminaStatus StaminaStatus;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Items")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Items")
 	AWeapon* EquippedWeapon;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Items")
+	AItem* ActiveOverlappingItem;
+
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShiftKeyDown;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bLMBDown;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	float SprintingSpeed;
 

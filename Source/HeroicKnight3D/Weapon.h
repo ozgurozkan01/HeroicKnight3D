@@ -16,6 +16,12 @@ public:
 	
 	AWeapon();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Particles")
+	bool bWeaponParticles;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")
+	USoundCue* WeaponSound;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
 	USkeletalMeshComponent* WeaponMesh;
 	

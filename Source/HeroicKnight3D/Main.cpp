@@ -3,6 +3,7 @@
 
 #include "Main.h"
 
+#include "Weapon.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -48,6 +49,7 @@ AMain::AMain()
 	RunningSpeed = 600.f;
 	
 	bShiftKeyDown = false;
+	bLMBDown = false;
 	
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
@@ -77,6 +79,8 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Sprinting", IE_Pressed, this, &AMain::ShiftKeyDown);
 	PlayerInputComponent->BindAction("Sprinting", IE_Released, this, &AMain::ShiftKeyUp);
+	PlayerInputComponent->BindAction("LMB", IE_Pressed, this, &AMain::LMBDown);
+	PlayerInputComponent->BindAction("LMB", IE_Released, this, &AMain::LMBUp);
 	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMain::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMain::MoveRight);
@@ -224,6 +228,25 @@ void AMain::ShiftKeyUp()
 {
 	bShiftKeyDown = false;
 	SetMovementStatus(EMovementStatus::EMS_Normal);
+}
+
+void AMain::LMBDown()
+{
+	bLMBDown = true;
+
+	if (ActiveOverlappingItem == nullptr) { return; }
+
+	AWeapon* CurrentWeapon = Cast<AWeapon>(ActiveOverlappingItem);
+
+	if (CurrentWeapon == nullptr) { return; }
+
+	CurrentWeapon->WeaponAttach(this);
+	SetActiveOverlappingItem(nullptr);
+}
+
+void AMain::LMBUp()
+{
+	bLMBDown = false;
 }
 
 void AMain::SetMovementStatus(EMovementStatus CurrentStatus)

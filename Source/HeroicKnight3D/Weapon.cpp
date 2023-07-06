@@ -5,11 +5,14 @@
 
 #include "Main.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Particles/ParticleSystemComponent.h"
 
 AWeapon::AWeapon()
 {
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon Mesh"));
 	WeaponMesh->SetupAttachment(GetRootComponent());
+
+	bWeaponParticles = false;
 }
 
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -23,7 +26,7 @@ void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 	if(MainPlayer == nullptr) { return; }
 
-	WeaponAttach(MainPlayer);
+	MainPlayer->SetActiveOverlappingItem(this);
 	
 }
 
@@ -31,6 +34,14 @@ void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	int32 OtherBodyIndex)
 {
 	Super::OnOverlapEnd(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+	
+	if (OtherActor == nullptr) { return; }
+
+	AMain* MainPlayer = Cast<AMain>(OtherActor);
+
+	if(MainPlayer == nullptr) { return; }
+
+	MainPlayer->SetActiveOverlappingItem(nullptr);
 }
 
 void AWeapon::WeaponAttach(AMain* MainPlayer)
@@ -56,5 +67,10 @@ void AWeapon::WeaponAttach(AMain* MainPlayer)
 	// That refers to that the skeletal mesh which has weaponHolderSocket
 	WeaponHolderSocket->AttachActor(this, MainPlayer->GetMesh());
 	bRotate = false;
-	MainPlayer->SetEquippedWeapon(this);
+	MainPlayer->SetEquippedWeapon(this);// Set a weapon as particular instance
+
+	if (!bWeaponParticles)
+	{
+		IdleParticle->Deactivate();
+	}
 }
