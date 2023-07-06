@@ -56,4 +56,5 @@ void AWeapon::WeaponAttach(AMain* MainPlayer)
 	// That refers to that the skeletal mesh which has weaponHolderSocket
 	WeaponHolderSocket->AttachActor(this, MainPlayer->GetMesh());
 	bRotate = false;
+	MainPlayer->SetEquippedWeapon(this);
 }

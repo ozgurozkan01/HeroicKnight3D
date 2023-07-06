@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class AWeapon;
 
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
@@ -54,16 +55,18 @@ public:
 	void ShiftKeyDown();
 	void ShiftKeyUp();
 
-	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
 	void SetMovementStatus(EMovementStatus CurrentStatus);
+	void SetStaminaLevel();
+	
 	void DecrementHealth(float TakenDamage);
 	void IncrementCoin(int32 TakenCoin);
-	void SetStaminaLevel();
 	void Die();
 	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
-
+	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
+	FORCEINLINE void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
 
@@ -84,6 +87,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats")
 	EStaminaStatus StaminaStatus;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Items")
+	AWeapon* EquippedWeapon;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShiftKeyDown;
