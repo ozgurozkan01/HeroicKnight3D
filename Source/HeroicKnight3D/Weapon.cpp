@@ -5,7 +5,9 @@
 
 #include "Main.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Sound/SoundCue.h"
 
 AWeapon::AWeapon()
 {
@@ -13,6 +15,8 @@ AWeapon::AWeapon()
 	WeaponMesh->SetupAttachment(GetRootComponent());
 
 	bWeaponParticles = false;
+
+	WeaponState = EWeaponState::EWS_PickUp;
 }
 
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -20,7 +24,7 @@ void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	if (OtherActor == nullptr) { return; }
+	if (WeaponState != EWeaponState::EWS_PickUp || OtherActor == nullptr) { return; }
 
 	AMain* MainPlayer = Cast<AMain>(OtherActor);
 
@@ -68,6 +72,12 @@ void AWeapon::WeaponAttach(AMain* MainPlayer)
 	WeaponHolderSocket->AttachActor(this, MainPlayer->GetMesh());
 	bRotate = false;
 	MainPlayer->SetEquippedWeapon(this);// Set a weapon as particular instance
+	MainPlayer->SetActiveOverlappingItem(nullptr);
+
+	if (WeaponSound)
+	{
+		UGameplayStatics::PlaySound2D(this, WeaponSound);
+	}
 
 	if (!bWeaponParticles)
 	{
