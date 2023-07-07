@@ -6,6 +6,18 @@
 #include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
+class USphereComponent;
+
+UENUM(BlueprintType)
+enum class EEnemyMovementStatus : uint8
+{
+	EMS_Idle UMETA(DisplayName = "Idle"),
+	EMS_Walk UMETA(DisplayName = "Walk"),
+	EMS_Attacking UMETA(DisplayName = "Attacking"),
+
+	EMS_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
 UCLASS()
 class HEROICKNIGHT3D_API AEnemy : public ACharacter
 {
@@ -15,8 +27,17 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
-	UCapsuleComponent* DetectTargetCollision;
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
+	EEnemyMovementStatus EnemyMovementStatus;
+
+	FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus CurrentStatus) { EnemyMovementStatus = CurrentStatus; }
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
+	USphereComponent* AgroSphere;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
+	USphereComponent* CombatSphere;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

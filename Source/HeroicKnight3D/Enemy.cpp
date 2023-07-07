@@ -2,9 +2,9 @@
 
 
 #include "Enemy.h"
-
 #include "AIController.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -12,9 +12,13 @@ AEnemy::AEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	DetectTargetCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetDetectionCollision"));
-	DetectTargetCollision->SetupAttachment(GetRootComponent());
-	DetectTargetCollision->SetCapsuleRadius(1000.f);
+	AgroSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AgroSphere"));
+	AgroSphere->SetupAttachment(GetRootComponent());
+	AgroSphere->SetSphereRadius(600.f);
+	
+	CombatSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CombatSphere"));
+	CombatSphere->SetupAttachment(GetRootComponent());
+	CombatSphere->SetSphereRadius(100.f);
 }
 
 // Called when the game starts or when spawned
