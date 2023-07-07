@@ -66,6 +66,9 @@ public:
 	void DecrementHealth(float TakenDamage);
 	void IncrementCoin(int32 TakenCoin);
 	void Attack();
+	
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
 	void Die();
 	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}

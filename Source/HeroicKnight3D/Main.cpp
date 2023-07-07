@@ -183,7 +183,7 @@ void AMain::SetStaminaLevel()
 
 void AMain::MoveForward(float InputValue)
 {
-	if (Controller == nullptr || InputValue == 0.f) return;
+	if (Controller == nullptr || InputValue == 0.f || bAttacking) return;
 	
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -197,7 +197,7 @@ void AMain::MoveForward(float InputValue)
 
 void AMain::MoveRight(float InputValue)
 {
-	if (Controller == nullptr || InputValue == 0.f) return;
+	if (Controller == nullptr || InputValue == 0.f || bAttacking) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -292,14 +292,27 @@ void AMain::IncrementCoin(int32 TakenCoin)
 
 void AMain::Attack()
 {
-	bAttacking = true;
-
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
-	if(AnimInstance && CombatMontage)
+	if (!bAttacking)
 	{
-		AnimInstance->Montage_Play(CombatMontage, 1.35f);
-		AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
+		bAttacking = true;
+
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+		if(AnimInstance && CombatMontage)
+		{
+			AnimInstance->Montage_Play(CombatMontage, 1.35f);
+			AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
+		}	
+	}
+}
+
+void AMain::AttackEnd()
+{
+	bAttacking = false;
+
+	if (bLMBDown)
+	{
+		Attack();
 	}
 }
 
@@ -317,4 +330,3 @@ void AMain::SetEquippedWeapon(AWeapon* WeaponToSet)
 
 	EquippedWeapon = WeaponToSet;
 }
-
