@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimInstance.h"
 
 // Sets default values
 AMain::AMain()
@@ -50,6 +52,7 @@ AMain::AMain()
 	
 	bShiftKeyDown = false;
 	bLMBDown = false;
+	bAttacking = false;
 	
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
@@ -296,7 +299,7 @@ void AMain::Attack()
 	if(AnimInstance && CombatMontage)
 	{
 		AnimInstance->Montage_Play(CombatMontage, 1.35f);
-		AnimInstance->Montage_JumpToSection(FName("Attack1"), CombatMontage);
+		AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
 	}
 }
 

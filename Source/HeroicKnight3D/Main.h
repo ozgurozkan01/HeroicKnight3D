@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class AWeapon;
 class AItem;
+class UAnimMontage;
 
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
