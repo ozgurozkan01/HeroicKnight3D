@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
+class AAIController;
 class USphereComponent;
 
 UENUM(BlueprintType)
@@ -38,6 +39,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 	USphereComponent* CombatSphere;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
+	AAIController* AIController;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -59,5 +63,5 @@ public:
 	UFUNCTION()
 	virtual void CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	
+	void MoveToTarget(AMain* Target);
 };
