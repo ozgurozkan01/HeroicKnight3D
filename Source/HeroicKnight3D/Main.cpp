@@ -234,14 +234,21 @@ void AMain::LMBDown()
 {
 	bLMBDown = true;
 
-	if (ActiveOverlappingItem == nullptr) { return; }
+	if (ActiveOverlappingItem)
+	{
+		AWeapon* CurrentWeapon = Cast<AWeapon>(ActiveOverlappingItem);
 
-	AWeapon* CurrentWeapon = Cast<AWeapon>(ActiveOverlappingItem);
+		if (CurrentWeapon == nullptr) { return; }
 
-	if (CurrentWeapon == nullptr) { return; }
+		CurrentWeapon->WeaponAttach(this);
+		SetActiveOverlappingItem(nullptr);
+	}
 
-	CurrentWeapon->WeaponAttach(this);
-	SetActiveOverlappingItem(nullptr);
+
+	else if (EquippedWeapon)
+	{
+		Attack();
+	}
 }
 
 void AMain::LMBUp()
@@ -278,6 +285,19 @@ void AMain::DecrementHealth(float TakenDamage)
 void AMain::IncrementCoin(int32 TakenCoin)
 {
 	Coin += TakenCoin;
+}
+
+void AMain::Attack()
+{
+	bAttacking = true;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if(AnimInstance && CombatMontage)
+	{
+		AnimInstance->Montage_Play(CombatMontage, 1.35f);
+		AnimInstance->Montage_JumpToSection(FName("Attack1"), CombatMontage);
+	}
 }
 
 void AMain::Die()

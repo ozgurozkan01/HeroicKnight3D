@@ -28,7 +28,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	EWeaponState WeaponState;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Particles")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Items | Particles")
 	bool bWeaponParticles;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")

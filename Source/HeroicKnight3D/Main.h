@@ -64,6 +64,7 @@ public:
 	
 	void DecrementHealth(float TakenDamage);
 	void IncrementCoin(int32 TakenCoin);
+	void Attack();
 	void Die();
 	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
@@ -100,12 +101,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Items")
 	AItem* ActiveOverlappingItem;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attack")
+	UAnimMontage* CombatMontage;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShiftKeyDown;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bLMBDown;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Attack")
+	bool bAttacking;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	float SprintingSpeed;
