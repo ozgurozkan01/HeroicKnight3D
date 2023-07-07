@@ -3,19 +3,25 @@
 
 #include "Enemy.h"
 
+#include "AIController.h"
+#include "Components/CapsuleComponent.h"
+
 // Sets default values
 AEnemy::AEnemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	DetectTargetCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetDetectionCollision"));
+	DetectTargetCollision->SetupAttachment(GetRootComponent());
+	DetectTargetCollision->SetCapsuleRadius(1000.f);
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -31,4 +37,3 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
