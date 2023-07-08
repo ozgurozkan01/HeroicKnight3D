@@ -43,12 +43,23 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 	AAIController* AIController;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
+	UParticleSystem* HitParticles;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
 	bool bOverlappingCombatSphere;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
 	AMain* CombatTarget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
+	float CurrentHealth;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
+	float MaxHealth;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
+	float Damage;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -65,9 +76,9 @@ public:
 	UFUNCTION()
 	virtual void AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	UFUNCTION()
-	virtual void CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	void CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	UFUNCTION()
-	virtual void CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UFUNCTION(BlueprintCallable)
 	void MoveToTarget(AMain* MainPlayer);

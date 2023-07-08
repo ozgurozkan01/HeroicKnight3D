@@ -23,6 +23,10 @@ AEnemy::AEnemy()
 	CombatSphere->SetSphereRadius(100.f);
 
 	bOverlappingCombatSphere = false;
+
+	MaxHealth = 100.f;
+	CurrentHealth = MaxHealth;
+	Damage = 10.f;
 }
 
 // Called when the game starts or when spawned
