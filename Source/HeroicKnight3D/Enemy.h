@@ -8,12 +8,13 @@
 
 class AAIController;
 class USphereComponent;
+class AMain;
 
 UENUM(BlueprintType)
 enum class EEnemyMovementStatus : uint8
 {
 	EMS_Idle UMETA(DisplayName = "Idle"),
-	EMS_Walk UMETA(DisplayName = "Walk"),
+	EMS_MoveToTarget UMETA(DisplayName = "MoveToTarget"),
 	EMS_Attacking UMETA(DisplayName = "Attacking"),
 
 	EMS_MAX UMETA(DisplayName = "DefaultMAX")

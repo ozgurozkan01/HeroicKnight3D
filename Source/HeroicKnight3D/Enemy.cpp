@@ -3,8 +3,10 @@
 
 #include "Enemy.h"
 #include "AIController.h"
+#include "Main.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Navigation/PathFollowingComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -53,7 +55,9 @@ void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 {
 	if (OtherActor)
 	{
-		
+		AMain* MainPlayer = Cast<AMain>(OtherActor);
+
+		MoveToTarget(MainPlayer);
 	}
 }
 void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -71,4 +75,16 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 
 void AEnemy::MoveToTarget(AMain* Target)
 {
+	SetEnemyMovementStatus(EEnemyMovementStatus::EMS_MoveToTarget);
+
+	if (AIController)
+	{
+		FAIMoveRequest MoveRequest;
+		MoveRequest.SetGoalActor(Target);
+		MoveRequest.SetAcceptanceRadius(5.f);
+
+		FNavPathSharedPtr NavPath;
+
+		AIController->MoveTo(MoveRequest, &NavPath);
+	}
 }
