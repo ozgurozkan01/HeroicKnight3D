@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Weapon.generated.h"
 
+class UBoxComponent;
 class AMain;
 
 UENUM(BlueprintType)
@@ -37,11 +38,23 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
 	USkeletalMeshComponent* WeaponMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
+	UBoxComponent* CombatCollision;
+protected:
+
+	virtual void BeginPlay() override;
+	
+public:
+
 	FORCEINLINE void SetWeaponState(EWeaponState CurrentState) {WeaponState = CurrentState;}
 	FORCEINLINE EWeaponState GetWeaponState() { return WeaponState;}
 	
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
+	void CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	
 	void WeaponAttach(AMain* MainPlayer);
 };
