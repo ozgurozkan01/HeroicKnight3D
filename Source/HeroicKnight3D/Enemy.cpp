@@ -21,6 +21,8 @@ AEnemy::AEnemy()
 	CombatSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CombatSphere"));
 	CombatSphere->SetupAttachment(GetRootComponent());
 	CombatSphere->SetSphereRadius(100.f);
+
+	bOverlappingCombatSphere = false;
 }
 
 // Called when the game starts or when spawned
@@ -57,30 +59,70 @@ void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
-		MoveToTarget(MainPlayer);
+		if(AIController)
+		{
+			MoveToTarget(MainPlayer);
+		}
 	}
 }
 void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (OtherActor)
+	{
+		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
+		if(MainPlayer)
+		{
+			SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Idle);
+
+			if (AIController)
+			{
+				AIController->StopMovement();
+			}
+		}
+	}
 }
 void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	if (OtherActor)
+	{
+		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
+		if(MainPlayer)
+		{
+			CombatTarget = MainPlayer; // Reference to pass move to target in BP 
+			bOverlappingCombatSphere = true; // controller which executes MoveToTarget() function
+			SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Attacking);
+		}
+	}
 }
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (OtherActor)
+	{
+		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
+		if(MainPlayer)
+		{
+			bOverlappingCombatSphere = false;
+
+			if (EnemyMovementStatus != EEnemyMovementStatus::EMS_Attacking)
+			{
+				MoveToTarget(MainPlayer);
+				CombatTarget = nullptr;
+			}
+		}
+	}
 }
 
-void AEnemy::MoveToTarget(AMain* Target)
+void AEnemy::MoveToTarget(AMain* MainPlayer)
 {
 	SetEnemyMovementStatus(EEnemyMovementStatus::EMS_MoveToTarget);
 
 	if (AIController)
 	{
 		FAIMoveRequest MoveRequest;
-		MoveRequest.SetGoalActor(Target);
+		MoveRequest.SetGoalActor(MainPlayer);
 		MoveRequest.SetAcceptanceRadius(5.f);
 
 		FNavPathSharedPtr NavPath;

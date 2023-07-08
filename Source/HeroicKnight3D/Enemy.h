@@ -42,6 +42,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 	AAIController* AIController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
+	bool bOverlappingCombatSphere;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
+	AMain* CombatTarget;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -54,7 +60,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 	UFUNCTION()
 	virtual void AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	UFUNCTION()
@@ -64,5 +69,6 @@ public:
 	UFUNCTION()
 	virtual void CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	void MoveToTarget(AMain* Target);
+	UFUNCTION(BlueprintCallable)
+	void MoveToTarget(AMain* MainPlayer);
 };
