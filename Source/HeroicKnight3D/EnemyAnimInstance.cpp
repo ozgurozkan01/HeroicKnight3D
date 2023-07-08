@@ -31,11 +31,11 @@ void UEnemyAnimInstance::UpdateAnimationProperties()
 			if(Enemy ==  nullptr)
 			{
 				Enemy = Cast<AEnemy>(Pawn);
-			}
+			}	
 		}
 	}
 
-	else if(Pawn)
+	if(Pawn)
 	{
 		FVector Speed = Pawn->GetVelocity();
 		FVector LateralSpeed = FVector(Speed.X, Speed.Y, 0.f);
