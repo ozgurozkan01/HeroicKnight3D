@@ -3,6 +3,7 @@
 
 #include "Weapon.h"
 
+#include "Enemy.h"
 #include "Main.h"
 #include "Components/BoxComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
@@ -16,11 +17,12 @@ AWeapon::AWeapon()
 	WeaponMesh->SetupAttachment(GetRootComponent());
 
 	CombatCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("CombatCollision"));
-	CombatCollision->SetupAttachment(WeaponMesh);
+	CombatCollision->SetupAttachment(GetRootComponent());
 	
 	bWeaponParticles = false;
 
 	WeaponState = EWeaponState::EWS_PickUp;
+	Damage = 25.f;
 }
 
 void AWeapon::BeginPlay()
@@ -63,7 +65,22 @@ void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+	if (OtherActor)
+	{
+		AEnemy* Enemy = Cast<AEnemy>(OtherActor);
+		UE_LOG(LogTemp, Warning, TEXT("TEST 1"));
+		
+		if (Enemy)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("TEST 2"));
+			if (Enemy->HitParticles)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Enemy->HitParticles, GetActorLocation(), FRotator(0.f), false);
+				UE_LOG(LogTemp, Warning, TEXT("TEST 3"));
+			}
+		}
+		
+	}
 }
 
 void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
