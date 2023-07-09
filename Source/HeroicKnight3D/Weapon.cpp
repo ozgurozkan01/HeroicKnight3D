@@ -93,7 +93,7 @@ void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActo
 	
 }
 
-/*void AWeapon::ActivateCombatCollision()
+void AWeapon::ActivateCombatCollision()
 {
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
@@ -101,7 +101,7 @@ void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActo
 void AWeapon::DeactivateCombatCollision()
 {
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-}*/
+}
 
 void AWeapon::WeaponAttach(AMain* MainPlayer)
 {
