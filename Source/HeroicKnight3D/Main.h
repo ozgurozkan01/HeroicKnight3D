@@ -69,6 +69,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
+	UFUNCTION(BlueprintCallable)
+	void PlaySwingSound();
 	void Die();
 	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
