@@ -82,8 +82,12 @@ void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 				FVector WeaponSocketLocation = WeaponSocket->GetSocketLocation(WeaponMesh);
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Enemy->HitParticles, WeaponSocketLocation, FRotator(0.f), false);
 			}
+
+			if (Enemy->HitSound)
+			{
+				UGameplayStatics::PlaySound2D(this, Enemy->HitSound);
+			}
 		}
-		
 	}
 }
 
