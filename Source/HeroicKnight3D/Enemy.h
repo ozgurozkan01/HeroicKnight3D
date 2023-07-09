@@ -9,6 +9,7 @@
 class AAIController;
 class USphereComponent;
 class AMain;
+class USoundCue;
 
 UENUM(BlueprintType)
 enum class EEnemyMovementStatus : uint8
@@ -45,6 +46,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
 	UParticleSystem* HitParticles;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")
+	USoundCue* HitSound;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
 	bool bOverlappingCombatSphere;
