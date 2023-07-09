@@ -59,7 +59,10 @@ public:
 	void CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	UFUNCTION()
 	void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-	
+	UFUNCTION(BlueprintCallable)
+	void ActivateCombatCollision();
+	UFUNCTION(BlueprintCallable)
+	void DeactivateCombatCollision();
 	void WeaponAttach(AMain* MainPlayer);
+	
 };
