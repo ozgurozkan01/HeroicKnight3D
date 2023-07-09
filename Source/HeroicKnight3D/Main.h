@@ -11,6 +11,7 @@ class USpringArmComponent;
 class AWeapon;
 class AItem;
 class UAnimMontage;
+class USoundCue;
 
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
@@ -109,6 +110,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Attack")
 	UAnimMontage* CombatMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
+	UParticleSystem* HitParticles;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")
+	USoundCue* HitSound;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShiftKeyDown;
