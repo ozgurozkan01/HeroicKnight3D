@@ -5,7 +5,6 @@
 #include "AIController.h"
 #include "Main.h"
 #include "Components/BoxComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Kismet/GameplayStatics.h"
@@ -35,7 +34,7 @@ AEnemy::AEnemy()
 	CurrentHealth = MaxHealth;
 	Damage = 10.f;
 	MinAttackDelayTime = 0.5f;
-	MaxAttackDelayTime = 2.f;
+	MaxAttackDelayTime = 1.5f;
 }
 
 // Called when the game starts or when spawned
