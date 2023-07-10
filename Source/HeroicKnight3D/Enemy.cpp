@@ -34,6 +34,8 @@ AEnemy::AEnemy()
 	MaxHealth = 100.f;
 	CurrentHealth = MaxHealth;
 	Damage = 10.f;
+	MinAttackDelayTime = 0.5f;
+	MaxAttackDelayTime = 2.f;
 }
 
 // Called when the game starts or when spawned
@@ -131,6 +133,7 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 				CombatTarget = nullptr;
 			}
 		}
+		GetWorldTimerManager().ClearTimer(AttackTimerHandle); // When attack is stoppping, then we clean up the timer.
 	}
 }
 
@@ -218,7 +221,9 @@ void AEnemy::AttackEnd()
 
 	if (bOverlappingCombatSphere)
 	{
-		Attack();	
+		// We add delay time when attack end for waiting for another attacking
+		float AttackDelayTime = FMath::FRandRange(MinAttackDelayTime, MaxAttackDelayTime);
+		GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &AEnemy::Attack, AttackDelayTime);
 	}
 }
 

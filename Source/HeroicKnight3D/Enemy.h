@@ -59,13 +59,19 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | AI")
 	UAnimMontage* CombatMontage;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
-	bool bOverlappingCombatSphere;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
 	AMain* CombatTarget;
 
+	FTimerHandle AttackTimerHandle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
+	float MinAttackDelayTime;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
+	float MaxAttackDelayTime;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
+	bool bOverlappingCombatSphere;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
 	float CurrentHealth;
 
