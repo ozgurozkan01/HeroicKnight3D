@@ -51,7 +51,7 @@ AMain::AMain()
 	MinSprintStamina = 100.f;
 	SprintingSpeed = 1000.f;
 	RunningSpeed = 600.f;
-	InterpSpeed = 15.f;
+	InterpSpeed = 10.f;
 	
 	bShiftKeyDown = false;
 	bLMBDown = false;
