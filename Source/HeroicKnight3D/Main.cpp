@@ -3,6 +3,7 @@
 
 #include "Main.h"
 
+#include "Enemy.h"
 #include "Weapon.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -10,6 +11,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Sound/SoundCue.h"
 
 // Sets default values
@@ -45,16 +47,16 @@ AMain::AMain()
 	CurrentHealth = MaxHealth;
 	CurrentStamina = MaxStamina;
 	Coin = 0;
-
 	StaminaDrainRate = 25.f;
 	MinSprintStamina = 100.f;
-	
 	SprintingSpeed = 1000.f;
 	RunningSpeed = 600.f;
+	InterpSpeed = 15.f;
 	
 	bShiftKeyDown = false;
 	bLMBDown = false;
 	bAttacking = false;
+	bInterpToEnemy = false;
 	
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
@@ -72,6 +74,8 @@ void AMain::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	SetStaminaLevel();
+	InterpRotationToTarget(DeltaTime);
+	
 }
 
 // Called to bind functionality to input
@@ -297,7 +301,7 @@ void AMain::Attack()
 	if (!bAttacking)
 	{
 		bAttacking = true;
-
+		SetInterpToEnemy(true);
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 		if(AnimInstance && CombatMontage)
@@ -325,7 +329,7 @@ void AMain::Attack()
 void AMain::AttackEnd()
 {
 	bAttacking = false;
-
+	SetInterpToEnemy(false);
 	if (bLMBDown)
 	{
 		Attack();
@@ -345,6 +349,11 @@ void AMain::Die()
 	
 }
 
+void AMain::SetInterpToEnemy(bool bInterpTo)
+{
+	bInterpToEnemy = bInterpTo;
+}
+
 void AMain::SetEquippedWeapon(AWeapon* WeaponToSet)
 {
 	if (EquippedWeapon)
@@ -353,4 +362,23 @@ void AMain::SetEquippedWeapon(AWeapon* WeaponToSet)
 	}
 
 	EquippedWeapon = WeaponToSet;
+}
+
+void AMain::InterpRotationToTarget(float& DeltaTime)
+{
+	if (bInterpToEnemy && CombatTarget)
+	{
+		FRotator LookAtYaw = GetInterpRotationYaw(CombatTarget->GetActorLocation());
+		FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), LookAtYaw, DeltaTime, InterpSpeed);
+
+		SetActorRotation(InterpRotation);
+	}
+}
+
+FRotator AMain::GetInterpRotationYaw(FVector TargetLocation)
+{
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
+	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
+
+	return LookAtRotationYaw;
 }

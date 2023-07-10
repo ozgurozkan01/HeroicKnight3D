@@ -12,6 +12,7 @@ class AWeapon;
 class AItem;
 class UAnimMontage;
 class USoundCue;
+class AEnemy;
 
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
@@ -76,10 +77,15 @@ public:
 	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
-	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
-	void SetEquippedWeapon(AWeapon* WeaponToSet);
 	FORCEINLINE AWeapon* GetEquippedWeapon() { return EquippedWeapon;}
 	FORCEINLINE void SetActiveOverlappingItem(AItem* ItemToSet) { ActiveOverlappingItem = ItemToSet; }
+	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
+	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
+	void SetInterpToEnemy(bool bInterpTo);
+	void SetEquippedWeapon(AWeapon* WeaponToSet);
+	void InterpRotationToTarget(float& DeltaTime);
+	FRotator GetInterpRotationYaw(FVector TargetLocation);
+	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
@@ -105,6 +111,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Items")
 	AWeapon* EquippedWeapon;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
+	AEnemy* CombatTarget;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Items")
 	AItem* ActiveOverlappingItem;
 
@@ -125,6 +134,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Attack")
 	bool bAttacking;
+
+	bool bInterpToEnemy;
+	float InterpSpeed;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	float SprintingSpeed;
@@ -137,6 +149,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
 	float StaminaDrainRate;
+
+	
 
 private:
 

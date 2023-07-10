@@ -108,6 +108,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 
 		if(MainPlayer)
 		{
+			MainPlayer->SetCombatTarget(this);
 			CombatTarget = MainPlayer; // Reference to pass move to target in BP 
 			bOverlappingCombatSphere = true; // controller which executes MoveToTarget() function
 			Attack();
@@ -122,8 +123,8 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 
 		if(MainPlayer)
 		{
+			MainPlayer->SetCombatTarget(nullptr);
 			bOverlappingCombatSphere = false;
-
 			if (EnemyMovementStatus != EEnemyMovementStatus::EMS_Attacking)
 			{
 				MoveToTarget(MainPlayer);
