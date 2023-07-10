@@ -85,6 +85,7 @@ public:
 	void SetEquippedWeapon(AWeapon* WeaponToSet);
 	void InterpRotationToTarget(float& DeltaTime);
 	FRotator GetInterpRotationYaw(FVector TargetLocation);
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")

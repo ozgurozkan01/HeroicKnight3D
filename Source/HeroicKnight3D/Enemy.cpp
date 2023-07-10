@@ -156,6 +156,11 @@ void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 			{
 				UGameplayStatics::PlaySound2D(this, MainPlayer->HitSound);
 			}
+
+			if (DamageType)
+			{
+				UGameplayStatics::ApplyDamage(MainPlayer, Damage, AIController, this, DamageType);
+			}
 		}
 	}
 }

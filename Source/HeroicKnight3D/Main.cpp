@@ -366,6 +366,7 @@ void AMain::SetEquippedWeapon(AWeapon* WeaponToSet)
 
 void AMain::InterpRotationToTarget(float& DeltaTime)
 {
+	// this function is making to rotate character to target
 	if (bInterpToEnemy && CombatTarget)
 	{
 		FRotator LookAtYaw = GetInterpRotationYaw(CombatTarget->GetActorLocation());
@@ -377,8 +378,17 @@ void AMain::InterpRotationToTarget(float& DeltaTime)
 
 FRotator AMain::GetInterpRotationYaw(FVector TargetLocation)
 {
+	// this function is making to return difference of rotation transform between character and target.
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
 	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
 
 	return LookAtRotationYaw;
+}
+
+float AMain::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	DecrementHealth(DamageAmount);
+	
+	return DamageAmount;
 }

@@ -63,6 +63,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
 	AMain* CombatTarget;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
+	TSubclassOf<UDamageType> DamageType;
+	
 	FTimerHandle AttackTimerHandle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
