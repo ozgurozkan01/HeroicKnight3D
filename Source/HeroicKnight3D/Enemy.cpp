@@ -31,7 +31,7 @@ AEnemy::AEnemy()
 	
 	bOverlappingCombatSphere = false;
 
-	MaxHealth = 100.f;
+	MaxHealth = 10.f;
 	CurrentHealth = MaxHealth;
 	Damage = 10.f;
 	MinAttackDelayTime = 0.5f;
@@ -89,7 +89,7 @@ void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 }
 void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OtherActor)
+	if (OtherActor && IsAlive())
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
@@ -121,7 +121,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 }
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OtherActor)
+	if (OtherActor && IsAlive())
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
@@ -134,8 +134,8 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 				MoveToTarget(MainPlayer);
 				CombatTarget = nullptr;
 			}
+			GetWorldTimerManager().ClearTimer(AttackTimerHandle); // When attack is stoppping, then we clean up the timer.
 		}
-		GetWorldTimerManager().ClearTimer(AttackTimerHandle); // When attack is stoppping, then we clean up the timer.
 	}
 }
 
@@ -192,11 +192,7 @@ void AEnemy::MoveToTarget(AMain* MainPlayer)
 
 void AEnemy::Attack()
 {
-	if (!IsAlive())
-	{
-			UE_LOG(LogTemp, Warning, TEXT("Enemy is dead!"));
-		return;
-	} // Enemy is dead
+	if (!IsAlive()) { return; } // Enemy is dead
 	
 	if (AIController)
 	{
@@ -250,7 +246,7 @@ void AEnemy::Die()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
-	if (AnimInstance && CombatMontage)
+	if (AnimInstance)
 	{
 		AnimInstance->Montage_Play(CombatMontage, 1.00f);
 		AnimInstance->Montage_JumpToSection("Death", CombatMontage);
@@ -268,7 +264,7 @@ void AEnemy::Die()
 void AEnemy::DeathEnd()
 {
 	GetMesh()->bPauseAnims = true;
-	GetMesh()->bNoSkeletonUpdate = true;
+	//GetMesh()->bNoSkeletonUpdate = true;
 }
 
 bool AEnemy::IsAlive()
