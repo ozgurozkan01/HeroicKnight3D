@@ -15,11 +15,12 @@ class USoundCue;
 UENUM(BlueprintType)
 enum class EEnemyMovementStatus : uint8
 {
-	EMS_Idle UMETA(DisplayName = "Idle"),
-	EMS_MoveToTarget UMETA(DisplayName = "MoveToTarget"),
-	EMS_Attacking UMETA(DisplayName = "Attacking"),
-
-	EMS_MAX UMETA(DisplayName = "DefaultMAX")
+	EMS_Idle			UMETA(DisplayName = "Idle"),
+	EMS_MoveToTarget	UMETA(DisplayName = "MoveToTarget"),
+	EMS_Attacking		UMETA(DisplayName = "Attacking"),
+	EMS_Dead			UMETA(DisplayName = "Dead"),
+	
+	EMS_MAX				UMETA(DisplayName = "DefaultMAX")
 };
 
 UCLASS()
@@ -33,9 +34,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
 	EEnemyMovementStatus EnemyMovementStatus;
-
-	FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus CurrentStatus) { EnemyMovementStatus = CurrentStatus; }
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 	USphereComponent* AgroSphere;
 
@@ -75,7 +74,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
 	bool bOverlappingCombatSphere;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
 	float CurrentHealth;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
@@ -97,6 +96,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus CurrentStatus) { EnemyMovementStatus = CurrentStatus; }
+	//FORCEINLINE EEnemyMovementStatus GetEnemyMovementStatus() { return EnemyMovementStatus; };
+	
 	UFUNCTION()
 	virtual void AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	UFUNCTION()
@@ -109,7 +111,6 @@ public:
 	void CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	UFUNCTION()
 	void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	
 	UFUNCTION(BlueprintCallable)
 	void MoveToTarget(AMain* MainPlayer);
 	UFUNCTION(BlueprintCallable)
@@ -122,5 +123,11 @@ public:
 	void DeactivateCombatCollision();
 	UFUNCTION(BlueprintCallable)
 	void PlaySwingSound();
-	
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	void DecreaseHealth(float DamageTaken);
+	void Die();
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
+
+	bool IsAlive();
 };

@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "Main.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Kismet/GameplayStatics.h"
@@ -35,6 +36,8 @@ AEnemy::AEnemy()
 	Damage = 10.f;
 	MinAttackDelayTime = 0.5f;
 	MaxAttackDelayTime = 1.5f;
+
+	EnemyMovementStatus = EEnemyMovementStatus::EMS_Idle;
 }
 
 // Called when the game starts or when spawned
@@ -74,7 +77,7 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (OtherActor)
+	if (OtherActor && IsAlive())
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
@@ -103,7 +106,7 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 }
 void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (OtherActor)
+	if (OtherActor && IsAlive())
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
@@ -139,7 +142,7 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor)
+	if (OtherActor && IsAlive())
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 		if (MainPlayer)
@@ -173,7 +176,7 @@ void AEnemy::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor
 
 void AEnemy::MoveToTarget(AMain* MainPlayer)
 {
-	SetEnemyMovementStatus(EEnemyMovementStatus::EMS_MoveToTarget);
+	//SetEnemyMovementStatus(EEnemyMovementStatus::EMS_MoveToTarget);
 
 	if (AIController)
 	{
@@ -189,11 +192,17 @@ void AEnemy::MoveToTarget(AMain* MainPlayer)
 
 void AEnemy::Attack()
 {
+	if (!IsAlive())
+	{
+			UE_LOG(LogTemp, Warning, TEXT("Enemy is dead!"));
+		return;
+	} // Enemy is dead
+	
 	if (AIController)
 	{
 		// Should not move when attacking starts
 		AIController->StopMovement();
-		SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Attacking);
+		//SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Attacking);
 	}
 
 	if (!bAttacking)
@@ -218,6 +227,54 @@ void AEnemy::PlaySwingSound()
 		UGameplayStatics::PlaySound2D(this, SwingSound);
 	}
 }
+
+float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	DecreaseHealth(DamageAmount);
+
+	return DamageAmount;
+}
+
+void AEnemy::DecreaseHealth(float DamageTaken)
+{
+	if (CurrentHealth - DamageTaken <= 0)
+	{
+		Die();
+	}
+
+	CurrentHealth -= DamageTaken;
+}
+
+void AEnemy::Die()
+{
+	/*UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (AnimInstance && CombatMontage)
+	{
+		AnimInstance->Montage_Play(CombatMontage, 1.00f);
+		AnimInstance->Montage_JumpToSection("Death", CombatMontage);
+	}
+
+	SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Dead);
+
+	// When Enemy is dead , then we close the all collisions.
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CombatSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
+}
+
+void AEnemy::DeathEnd()
+{
+	GetMesh()->bPauseAnims = true;
+	GetMesh()->bNoSkeletonUpdate = true;
+}
+
+/*bool AEnemy::IsAlive()
+{
+	return GetEnemyMovementStatus() != EEnemyMovementStatus::EMS_Dead;
+}*/
 
 void AEnemy::AttackEnd()
 {

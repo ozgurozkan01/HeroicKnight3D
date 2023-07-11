@@ -8,6 +8,7 @@
 
 class UBoxComponent;
 class AMain;
+class AController;
 
 UENUM(BlueprintType)
 enum class EWeaponState
@@ -46,6 +47,13 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")
 	USoundCue* SwingSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
+	TSubclassOf<UDamageType> DamageType;
+
+	// Weapon is an actor. So it does not have any controller
+	// We are gonna use main player controller.
+	AController* WeaponInstegator;
 	
 protected:
 
@@ -53,8 +61,9 @@ protected:
 	
 public:
 
-	FORCEINLINE void SetWeaponState(EWeaponState CurrentState) {WeaponState = CurrentState;}
-	FORCEINLINE EWeaponState GetWeaponState() { return WeaponState;}
+	FORCEINLINE void SetWeaponState(EWeaponState CurrentState) { WeaponState = CurrentState; }
+	FORCEINLINE void SetInstegator(AController* Instegator) { WeaponInstegator = Instegator; }
+	FORCEINLINE EWeaponState GetWeaponState() { return WeaponState; }
 	
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;

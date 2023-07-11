@@ -87,6 +87,11 @@ void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 			{
 				UGameplayStatics::PlaySound2D(this, Enemy->HitSound);
 			}
+
+			if (DamageType)
+			{
+				UGameplayStatics::ApplyDamage(Enemy, Damage, WeaponInstegator, this, DamageType);
+			}
 		}
 	}
 }
@@ -111,6 +116,7 @@ void AWeapon::WeaponAttach(AMain* MainPlayer)
 {
 	if (MainPlayer == nullptr) { return; }
 
+	SetInstegator(MainPlayer->GetController());
 	// We made ignore to responses of these channels
 	// Because, Otherwise weapon keeps going to collide every time
 	WeaponMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
