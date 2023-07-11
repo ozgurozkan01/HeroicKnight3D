@@ -257,7 +257,7 @@ void AEnemy::Die()
 	}
 
 	SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Dead);
-
+  
 	// When Enemy is dead , then we close the all collisions.
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
