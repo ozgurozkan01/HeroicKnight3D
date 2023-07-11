@@ -17,19 +17,22 @@ class AEnemy;
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
 {
-	EMS_Normal UMETA(DisplayName = "Normal"),
-	EMS_Sprinting UMETA(DisplayName = "Sprinting"),
-	EMS_MAX UMETA(DisplayName = "DefaultMAX") 
+	EMS_Normal		UMETA(DisplayName = "Normal"),
+	EMS_Sprinting	UMETA(DisplayName = "Sprinting"),
+	EMS_Dead	UMETA(DisplayName = "Dead"),
+
+	EMS_MAX			UMETA(DisplayName = "DefaultMAX") 
 };
 
 UENUM(BlueprintType)
 enum class EStaminaStatus : uint8
 {
-	ESS_Normal UMETA(DisplayName = "Normal"),
-	ESS_BelowMinimum UMETA(DisplayName = "BelowMinimum"),
-	ESS_Exhausted UMETA(DisplayName = "Exhausted"),
+	ESS_Normal				UMETA(DisplayName = "Normal"),
+	ESS_BelowMinimum		UMETA(DisplayName = "BelowMinimum"),
+	ESS_Exhausted			UMETA(DisplayName = "Exhausted"),
 	ESS_ExhaustedRecoviring UMETA(DisplayName = "ExhaustedRecoviring"),
-	ESS_MAX UMETA(DisplayName = "DefaultMAX")
+
+	ESS_MAX					UMETA(DisplayName = "DefaultMAX")
 };
 
 UCLASS()

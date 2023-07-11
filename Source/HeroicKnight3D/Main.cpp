@@ -10,6 +10,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
+#include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Sound/SoundCue.h"
@@ -189,7 +191,7 @@ void AMain::SetStaminaLevel()
 
 void AMain::MoveForward(float InputValue)
 {
-	if (Controller == nullptr || InputValue == 0.f || bAttacking) return;
+	if (Controller == nullptr || InputValue == 0.f || bAttacking || MovementStatus == EMovementStatus::EMS_Dead) return;
 	
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -203,7 +205,7 @@ void AMain::MoveForward(float InputValue)
 
 void AMain::MoveRight(float InputValue)
 {
-	if (Controller == nullptr || InputValue == 0.f || bAttacking) return;
+	if (Controller == nullptr || InputValue == 0.f || bAttacking || MovementStatus == EMovementStatus::EMS_Dead) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -346,7 +348,17 @@ void AMain::PlaySwingSound()
 
 void AMain::Die()
 {
-	
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if(AnimInstance && CombatMontage)
+	{
+		AnimInstance->Montage_Play(CombatMontage, 1.f);
+		AnimInstance->Montage_JumpToSection(FName("Death"));
+	}
+
+	SetMovementStatus(EMovementStatus::EMS_Dead);
+	EquippedWeapon->CombatCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 }
 
 void AMain::SetInterpToEnemy(bool bInterpTo)
