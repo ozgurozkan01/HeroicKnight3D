@@ -176,7 +176,7 @@ void AEnemy::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor
 
 void AEnemy::MoveToTarget(AMain* MainPlayer)
 {
-	//SetEnemyMovementStatus(EEnemyMovementStatus::EMS_MoveToTarget);
+	SetEnemyMovementStatus(EEnemyMovementStatus::EMS_MoveToTarget);
 
 	if (AIController)
 	{
@@ -202,7 +202,7 @@ void AEnemy::Attack()
 	{
 		// Should not move when attacking starts
 		AIController->StopMovement();
-		//SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Attacking);
+		SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Attacking);
 	}
 
 	if (!bAttacking)
@@ -248,7 +248,7 @@ void AEnemy::DecreaseHealth(float DamageTaken)
 
 void AEnemy::Die()
 {
-	/*UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	if (AnimInstance && CombatMontage)
 	{
@@ -262,7 +262,7 @@ void AEnemy::Die()
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CombatSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AEnemy::DeathEnd()
@@ -271,10 +271,10 @@ void AEnemy::DeathEnd()
 	GetMesh()->bNoSkeletonUpdate = true;
 }
 
-/*bool AEnemy::IsAlive()
+bool AEnemy::IsAlive()
 {
 	return GetEnemyMovementStatus() != EEnemyMovementStatus::EMS_Dead;
-}*/
+}
 
 void AEnemy::AttackEnd()
 {
