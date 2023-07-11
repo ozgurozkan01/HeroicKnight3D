@@ -187,7 +187,7 @@ void AMain::SetStaminaLevel()
 	default:
 		;
 	}
-}
+}  
 
 void AMain::MoveForward(float InputValue)
 {

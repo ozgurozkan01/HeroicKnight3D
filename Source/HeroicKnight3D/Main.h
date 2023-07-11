@@ -34,7 +34,7 @@ enum class EStaminaStatus : uint8
 
 	ESS_MAX					UMETA(DisplayName = "DefaultMAX")
 };
-
+  
 UCLASS()
 class HEROICKNIGHT3D_API AMain : public ACharacter
 {
