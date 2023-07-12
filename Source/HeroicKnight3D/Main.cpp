@@ -80,6 +80,8 @@ void AMain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (MovementStatus == EMovementStatus::EMS_Dead) { return; }
+	
 	SetStaminaLevel();
 	InterpRotationToTarget(DeltaTime);
 	
@@ -99,7 +101,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	check(PlayerInputComponent)
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMain::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Sprinting", IE_Pressed, this, &AMain::ShiftKeyDown);
 	PlayerInputComponent->BindAction("Sprinting", IE_Released, this, &AMain::ShiftKeyUp);
@@ -258,6 +260,8 @@ void AMain::LMBDown()
 {
 	bLMBDown = true;
 
+	if (MovementStatus == EMovementStatus::EMS_Dead) { return; }
+	
 	if (ActiveOverlappingItem)
 	{
 		AWeapon* CurrentWeapon = Cast<AWeapon>(ActiveOverlappingItem);
@@ -297,13 +301,12 @@ void AMain::SetMovementStatus(EMovementStatus CurrentStatus)
 
 void AMain::DecrementHealth(float TakenDamage)
 {
+	CurrentHealth -= TakenDamage;
+
 	if (CurrentHealth <= 0.f)
 	{
 		Die();
-		return;
 	}
-
-	CurrentHealth -= TakenDamage;
 }
 
 void AMain::IncrementCoin(int32 TakenCoin)
@@ -313,7 +316,7 @@ void AMain::IncrementCoin(int32 TakenCoin)
 
 void AMain::Attack()
 {
-	if (!bAttacking)
+	if (!bAttacking && MovementStatus != EMovementStatus::EMS_Dead)
 	{
 		bAttacking = true;
 		SetInterpToEnemy(true);
@@ -337,7 +340,6 @@ void AMain::Attack()
 					;
 			}
 		}
-		
 	}
 }
 
@@ -361,17 +363,25 @@ void AMain::PlaySwingSound()
 
 void AMain::Die()
 {
+	if (MovementStatus == EMovementStatus::EMS_Dead) {return;}
+	
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
-	if(AnimInstance && CombatMontage)
+	if(AnimInstance)
 	{
 		AnimInstance->Montage_Play(CombatMontage, 1.f);
 		AnimInstance->Montage_JumpToSection(FName("Death"));
 	}
 
 	SetMovementStatus(EMovementStatus::EMS_Dead);
-	EquippedWeapon->CombatCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
-	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
+	/*EquippedWeapon->CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
+}
+
+void AMain::DeathEnd()
+{
+	GetMesh()->bPauseAnims = true; // Stop Animation
+	GetMesh()->bNoSkeletonUpdate = true; // Stop updating the mesh properties 
 }
 
 void AMain::SetInterpToEnemy(bool bInterpTo)
@@ -416,4 +426,13 @@ float AMain::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACo
 	DecrementHealth(DamageAmount);
 	
 	return DamageAmount;
+}
+
+void AMain::Jump()
+{
+	// Jump function in Unreal Engine is virtual. So it can be overrided.
+	// We override it, cause to check character is alive
+	if (MovementStatus == EMovementStatus::EMS_Dead) { return; }
+
+	Super::Jump();
 }

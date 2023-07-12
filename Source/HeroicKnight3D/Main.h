@@ -75,6 +75,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
 	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
+	UFUNCTION(BlueprintCallable)
 	void PlaySwingSound();
 	void Die();
 	
@@ -91,6 +93,7 @@ public:
 	void InterpRotationToTarget(float& DeltaTime);
 	FRotator GetInterpRotationYaw(FVector TargetLocation);
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+	virtual void Jump() override;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
