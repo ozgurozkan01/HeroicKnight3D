@@ -32,7 +32,8 @@ AEnemy::AEnemy()
 	CombatCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("EnemySocket"));
 	
 	bOverlappingCombatSphere = false;
-
+	bHasValidTarget = false;
+		
 	MaxHealth = 100.f;
 	CurrentHealth = MaxHealth;
 	Damage = 10.f;
