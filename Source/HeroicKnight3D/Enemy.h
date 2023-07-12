@@ -85,6 +85,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="AI")
 	bool bAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
+	float DestroyDelay;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -123,11 +126,12 @@ public:
 	void DeactivateCombatCollision();
 	UFUNCTION(BlueprintCallable)
 	void PlaySwingSound();
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void DecreaseHealth(float DamageTaken);
 	void Die();
-	UFUNCTION(BlueprintCallable)
-	void DeathEnd();
-
+	void Disappear();
 	bool IsAlive();
+	
 };

@@ -13,7 +13,7 @@ class AItem;
 class UAnimMontage;
 class USoundCue;
 class AEnemy;
-
+class AMainPlayerController;
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
 {
@@ -84,12 +84,13 @@ public:
 	FORCEINLINE void SetActiveOverlappingItem(AItem* ItemToSet) { ActiveOverlappingItem = ItemToSet; }
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
 	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
+	FORCEINLINE void SetHasCombatTarget(bool HasCombatTarget) { bHasCombatTarget = HasCombatTarget; }
+	
 	void SetInterpToEnemy(bool bInterpTo);
 	void SetEquippedWeapon(AWeapon* WeaponToSet);
 	void InterpRotationToTarget(float& DeltaTime);
 	FRotator GetInterpRotationYaw(FVector TargetLocation);
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
-	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
@@ -130,6 +131,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")
 	USoundCue* HitSound;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
+	AMainPlayerController* MainPlayerController;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShiftKeyDown;
 
@@ -139,7 +143,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Attack")
 	bool bAttacking;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
+	bool bHasCombatTarget;
+
 	bool bInterpToEnemy;
+	
 	float InterpSpeed;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
@@ -154,7 +162,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
 	float StaminaDrainRate;
 
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
+	FVector CombatTargetLocation;
 
 private:
 

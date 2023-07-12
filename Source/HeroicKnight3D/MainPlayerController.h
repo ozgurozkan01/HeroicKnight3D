@@ -24,7 +24,26 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Widgets")
 	UUserWidget* HUDOverlay;
 
+	/* Getting convenient class to create widget asset */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Widgets")
+	TSubclassOf<UUserWidget> WEnemyHealthBar;
+
+	/* Holder to widget after creating it */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Widgets")
+	UUserWidget* EnemyHealthBar;
+
+	FVector EnemyLocation;
+	
+	void SetEnemyHealthBarProperties();
+	
+	// Show and remove the HUD on the player screen.
+	bool bEnemyHealthBarVisible; // Check HUD should be shown on the screen
+	void DisplayEnemyHealthBar();
+	void RemoveEnemyHealthBar();
+
+	
 protected:
 
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 };

@@ -4,6 +4,7 @@
 #include "Main.h"
 
 #include "Enemy.h"
+#include "MainPlayerController.h"
 #include "Weapon.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -59,6 +60,7 @@ AMain::AMain()
 	bLMBDown = false;
 	bAttacking = false;
 	bInterpToEnemy = false;
+	bHasCombatTarget = false;
 	
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
@@ -68,6 +70,9 @@ AMain::AMain()
 void AMain::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// We cast the default controller to the MainPlayerController which we created.
+	MainPlayerController = Cast<AMainPlayerController>(GetController());
 }
 
 // Called every frame
@@ -78,6 +83,14 @@ void AMain::Tick(float DeltaTime)
 	SetStaminaLevel();
 	InterpRotationToTarget(DeltaTime);
 	
+	if (CombatTarget)
+	{
+		CombatTargetLocation = CombatTarget->GetActorLocation();
+		if (MainPlayerController)
+		{
+			MainPlayerController->EnemyLocation = CombatTargetLocation;
+		}
+	}
 }
 
 // Called to bind functionality to input

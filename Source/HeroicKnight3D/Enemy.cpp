@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "AIController.h"
 #include "Main.h"
+#include "MainPlayerController.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
@@ -11,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "Sound/SoundCue.h"
+
 
 // Sets default values
 AEnemy::AEnemy()
@@ -31,12 +33,13 @@ AEnemy::AEnemy()
 	
 	bOverlappingCombatSphere = false;
 
-	MaxHealth = 10.f;
+	MaxHealth = 100.f;
 	CurrentHealth = MaxHealth;
 	Damage = 10.f;
 	MinAttackDelayTime = 0.5f;
 	MaxAttackDelayTime = 1.5f;
-
+	DestroyDelay = 3.f;
+	
 	EnemyMovementStatus = EEnemyMovementStatus::EMS_Idle;
 }
 
@@ -81,10 +84,7 @@ void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
-		if(AIController)
-		{
-			MoveToTarget(MainPlayer);
-		}
+		MoveToTarget(MainPlayer);
 	}
 }
 void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -95,8 +95,20 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 
 		if(MainPlayer)
 		{
+			if (MainPlayer->CombatTarget == this)
+			{
+				MainPlayer->SetCombatTarget(nullptr);
+			}
+			
+			
 			SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Idle);
+			MainPlayer->SetHasCombatTarget(false);
 
+			if (MainPlayer->MainPlayerController)
+			{
+				MainPlayer->MainPlayerController->RemoveEnemyHealthBar();
+			}
+			
 			if (AIController)
 			{
 				AIController->StopMovement();
@@ -113,6 +125,13 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 		if(MainPlayer)
 		{
 			MainPlayer->SetCombatTarget(this);
+			MainPlayer->SetHasCombatTarget(true);
+
+			if (MainPlayer->MainPlayerController)
+			{
+				MainPlayer->MainPlayerController->DisplayEnemyHealthBar();
+			}
+			
 			CombatTarget = MainPlayer; // Reference to pass move to target in BP 
 			bOverlappingCombatSphere = true; // controller which executes MoveToTarget() function
 			Attack();
@@ -127,8 +146,8 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 
 		if(MainPlayer)
 		{
-			MainPlayer->SetCombatTarget(nullptr);
 			bOverlappingCombatSphere = false;
+
 			if (EnemyMovementStatus != EEnemyMovementStatus::EMS_Attacking)
 			{
 				MoveToTarget(MainPlayer);
@@ -261,10 +280,17 @@ void AEnemy::Die()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+void AEnemy::Disappear()
+{
+	Destroy();
+}
+
 void AEnemy::DeathEnd()
 {
 	GetMesh()->bPauseAnims = true;
-	//GetMesh()->bNoSkeletonUpdate = true;
+	GetMesh()->bNoSkeletonUpdate = true;
+
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &AEnemy::Disappear, DestroyDelay);
 }
 
 bool AEnemy::IsAlive()
