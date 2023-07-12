@@ -29,7 +29,7 @@ AEnemy::AEnemy()
 	CombatSphere->SetSphereRadius(100.f);
 
 	CombatCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("CombatCollision"));
-	CombatCollision->SetupAttachment(GetMesh(), FName("EnemySocket"));
+	CombatCollision->SetupAttachment(GetMesh(), FName("EnemySocket")); 
 	
 	bOverlappingCombatSphere = false;
 	bHasValidTarget = false;
