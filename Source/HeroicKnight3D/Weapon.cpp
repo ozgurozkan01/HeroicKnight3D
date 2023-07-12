@@ -100,7 +100,7 @@ void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActo
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	
-}
+} 
 
 void AWeapon::ActivateCombatCollision()
 {
