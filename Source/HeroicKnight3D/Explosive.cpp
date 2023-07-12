@@ -4,6 +4,8 @@
 #include "Explosive.h"
 
 #include "Main.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 AExplosive::AExplosive()
 {
@@ -23,6 +25,13 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 
 	if (MainPlayer == nullptr) { return; }
 
+	if (OverlapParticle == nullptr) { return; }
+	
+	if (OverlapSound == nullptr) { return; }
+
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticle, GetActorLocation(), FRotator(0.f));
+	UGameplayStatics::PlaySound2D(GetWorld(), OverlapSound);
+	
 	MainPlayer->DecrementHealth(Damage);
 	Destroy();
 }

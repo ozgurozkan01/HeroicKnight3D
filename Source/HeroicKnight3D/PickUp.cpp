@@ -4,6 +4,8 @@
 #include "PickUp.h"
 
 #include "Main.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 APickUp::APickUp()
 {
@@ -21,6 +23,13 @@ void APickUp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 	if(MainPlayer == nullptr) { return; }
 
+	if (OverlapParticle == nullptr) { return; }
+	
+	if (OverlapSound == nullptr) { return; }
+
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticle, GetActorLocation(), FRotator(0.f));
+	UGameplayStatics::PlaySound2D(GetWorld(), OverlapSound);
+	
 	MainPlayer->IncrementCoin(PickedCoin);
 	Destroy();
 }
