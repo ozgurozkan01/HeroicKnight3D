@@ -95,6 +95,7 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 
 		if(MainPlayer)
 		{
+			bHasValidTarget = false;
 			if (MainPlayer->CombatTarget == this)
 			{
 				MainPlayer->SetCombatTarget(nullptr);
@@ -126,7 +127,8 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 		{
 			MainPlayer->SetCombatTarget(this);
 			MainPlayer->SetHasCombatTarget(true);
-
+			bHasValidTarget = true;
+			
 			if (MainPlayer->MainPlayerController)
 			{
 				MainPlayer->MainPlayerController->DisplayEnemyHealthBar();
@@ -134,6 +136,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 			
 			CombatTarget = MainPlayer; // Reference to pass move to target in BP 
 			bOverlappingCombatSphere = true; // controller which executes MoveToTarget() function
+
 			Attack();
 		}
 	}
@@ -211,7 +214,7 @@ void AEnemy::MoveToTarget(AMain* MainPlayer)
 
 void AEnemy::Attack()
 {
-	if (!IsAlive()) { return; } // Enemy is dead
+	if (!IsAlive() || !bHasValidTarget) { return; } // Enemy is dead
 	
 	if (AIController)
 	{

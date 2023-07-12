@@ -80,7 +80,7 @@ void AMain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (MovementStatus == EMovementStatus::EMS_Dead) { return; }
+	if (!IsAlive()) { return; }
 	
 	SetStaminaLevel();
 	InterpRotationToTarget(DeltaTime);
@@ -206,7 +206,7 @@ void AMain::SetStaminaLevel()
 
 void AMain::MoveForward(float InputValue)
 {
-	if (Controller == nullptr || InputValue == 0.f || bAttacking || MovementStatus == EMovementStatus::EMS_Dead) return;
+	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
 	
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -220,7 +220,7 @@ void AMain::MoveForward(float InputValue)
 
 void AMain::MoveRight(float InputValue)
 {
-	if (Controller == nullptr || InputValue == 0.f || bAttacking || MovementStatus == EMovementStatus::EMS_Dead) return;
+	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -260,7 +260,7 @@ void AMain::LMBDown()
 {
 	bLMBDown = true;
 
-	if (MovementStatus == EMovementStatus::EMS_Dead) { return; }
+	if (!IsAlive()) { return; }
 	
 	if (ActiveOverlappingItem)
 	{
@@ -301,12 +301,7 @@ void AMain::SetMovementStatus(EMovementStatus CurrentStatus)
 
 void AMain::DecrementHealth(float TakenDamage)
 {
-	CurrentHealth -= TakenDamage;
 
-	if (CurrentHealth <= 0.f)
-	{
-		Die();
-	}
 }
 
 void AMain::IncrementCoin(int32 TakenCoin)
@@ -363,7 +358,7 @@ void AMain::PlaySwingSound()
 
 void AMain::Die()
 {
-	if (MovementStatus == EMovementStatus::EMS_Dead) {return;}
+	if (!IsAlive()) {return;}
 	
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
@@ -423,8 +418,19 @@ FRotator AMain::GetInterpRotationYaw(FVector TargetLocation)
 float AMain::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	DecrementHealth(DamageAmount);
-	
+	CurrentHealth -= DamageAmount;
+
+	if (CurrentHealth <= 0.f)
+	{
+		Die();
+
+		if (DamageCauser)
+		{
+			AEnemy* Enemy = Cast<AEnemy>(DamageCauser);
+
+			Enemy->bHasValidTarget = false;
+		}		
+	}
 	return DamageAmount;
 }
 
@@ -432,7 +438,12 @@ void AMain::Jump()
 {
 	// Jump function in Unreal Engine is virtual. So it can be overrided.
 	// We override it, cause to check character is alive
-	if (MovementStatus == EMovementStatus::EMS_Dead) { return; }
+	if (!IsAlive()) { return; }
 
 	Super::Jump();
+}
+
+bool AMain::IsAlive()
+{
+	return MovementStatus != EMovementStatus::EMS_Dead;
 }

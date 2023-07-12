@@ -94,6 +94,8 @@ public:
 	FRotator GetInterpRotationYaw(FVector TargetLocation);
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 	virtual void Jump() override;
+	bool IsAlive();
+	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
