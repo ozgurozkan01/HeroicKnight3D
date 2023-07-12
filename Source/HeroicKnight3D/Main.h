@@ -152,6 +152,9 @@ public:
 	bool bHasCombatTarget;
 
 	bool bInterpToEnemy;
+	bool bMoveForward;
+	bool bMoveRight;
+
 	
 	float InterpSpeed;
 	

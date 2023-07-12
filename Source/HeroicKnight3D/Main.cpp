@@ -61,6 +61,8 @@ AMain::AMain()
 	bAttacking = false;
 	bInterpToEnemy = false;
 	bHasCombatTarget = false;
+	bMoveForward = false;
+	bMoveRight = false;
 	
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
@@ -81,7 +83,8 @@ void AMain::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (!IsAlive()) { return; }
-	
+
+
 	SetStaminaLevel();
 	InterpRotationToTarget(DeltaTime);
 	
@@ -122,19 +125,24 @@ void AMain::SetStaminaLevel()
 	{
 	case EStaminaStatus::ESS_Normal:
 
-		if (bShiftKeyDown)
+		if (bShiftKeyDown && (bMoveForward || bMoveRight))
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Test 1"));
 			if (CurrentStamina - DeltaStamina <= MinSprintStamina)
 			{
 				SetStaminaStatus(EStaminaStatus::ESS_BelowMinimum);
 			}
-			
-			CurrentStamina -= DeltaStamina;
-			SetMovementStatus(EMovementStatus::EMS_Sprinting);
+
+			else
+			{
+				CurrentStamina -= DeltaStamina;
+				SetMovementStatus(EMovementStatus::EMS_Sprinting);
+			}
 		}
 
 		else
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Test 2"));
 			if(CurrentStamina + DeltaStamina >= MaxStamina)
 			{
 				CurrentStamina = MaxStamina;
@@ -151,6 +159,7 @@ void AMain::SetStaminaLevel()
 	case EStaminaStatus::ESS_BelowMinimum:
 		if (bShiftKeyDown)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Test 3"));
 			if (CurrentStamina - DeltaStamina <= 0)
 			{
 				SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
@@ -160,13 +169,22 @@ void AMain::SetStaminaLevel()
 
 			else
 			{
-				CurrentStamina -= DeltaStamina;
-				SetMovementStatus(EMovementStatus::EMS_Sprinting);				
+				if (bMoveForward || bMoveRight)
+				{
+					CurrentStamina -= DeltaStamina;
+					SetMovementStatus(EMovementStatus::EMS_Sprinting);
+				}
+
+				else
+				{
+					SetMovementStatus(EMovementStatus::EMS_Normal);
+				}	
 			}
 		}
 
 		else
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Test 4"));
 			if (CurrentStamina + DeltaStamina >= MinSprintStamina)
 			{
 				SetStaminaStatus(EStaminaStatus::ESS_Normal);
@@ -178,20 +196,25 @@ void AMain::SetStaminaLevel()
 		break;
 	case EStaminaStatus::ESS_Exhausted:
 
-		if (bShiftKeyDown)
+		if (bShiftKeyDown && (bMoveForward || bMoveRight))
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Test 5"));
+
 			CurrentStamina = 0.f;
 		}
 
 		else
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Test 6"));
 			SetStaminaStatus(EStaminaStatus::ESS_ExhaustedRecoviring);
 			CurrentStamina += DeltaStamina;
 		}
 		SetMovementStatus(EMovementStatus::EMS_Normal);
 		break;
 	case EStaminaStatus::ESS_ExhaustedRecoviring:
-		 if (CurrentStamina + DeltaStamina >= MinSprintStamina)
+
+		UE_LOG(LogTemp, Warning, TEXT("Test 7"));
+		if (CurrentStamina + DeltaStamina >= MinSprintStamina)
 		{
 			SetStaminaStatus(EStaminaStatus::ESS_Normal);
 		}
@@ -206,8 +229,10 @@ void AMain::SetStaminaLevel()
 
 void AMain::MoveForward(float InputValue)
 {
-	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
+	bMoveForward = false;
 	
+	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
+
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
@@ -215,11 +240,13 @@ void AMain::MoveForward(float InputValue)
 	{
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, InputValue);
+		bMoveForward = true;
 	}
 }
 
 void AMain::MoveRight(float InputValue)
 {
+	bMoveRight = false;
 	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
@@ -229,6 +256,7 @@ void AMain::MoveRight(float InputValue)
 	{
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, InputValue);
+		bMoveRight = true;
 	}
 } 
 
@@ -247,13 +275,13 @@ void AMain::LookUpRate(float Rate)
 void AMain::ShiftKeyDown()
 {
 	bShiftKeyDown = true;
-	SetMovementStatus(EMovementStatus::EMS_Sprinting);
+	//SetMovementStatus(EMovementStatus::EMS_Sprinting);
 }
 
 void AMain::ShiftKeyUp()
 {
 	bShiftKeyDown = false;
-	SetMovementStatus(EMovementStatus::EMS_Normal);
+	//SetMovementStatus(EMovementStatus::EMS_Normal);
 }
 
 void AMain::LMBDown()
