@@ -77,7 +77,6 @@ public:
 	void DeathEnd();
 	UFUNCTION(BlueprintCallable)
 	void PlaySwingSound();
-	void Die();
 
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
@@ -94,7 +93,8 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 	virtual void Jump() override;
 	bool IsAlive();
-
+	void Die();
+	void UpdateCombatTarget();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
@@ -153,8 +153,7 @@ public:
 	bool bInterpToEnemy;
 	bool bMoveForward;
 	bool bMoveRight;
-
-
+	
 	float InterpSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
@@ -172,6 +171,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
 	FVector CombatTargetLocation;
 
+	TSubclassOf<AEnemy> EnemyFilter;
+	
 private:
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess = "true"), Category="Camera")

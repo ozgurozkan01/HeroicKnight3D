@@ -9,7 +9,6 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "Sound/SoundCue.h"
@@ -253,22 +252,18 @@ void AEnemy::PlaySwingSound()
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	DecreaseHealth(DamageAmount);
+	CurrentHealth -= DamageAmount;
 
+	if (CurrentHealth <= 0)
+	{
+		CurrentHealth = 0.f;
+		Die(DamageCauser);
+	}
+	
 	return DamageAmount;
 }
 
-void AEnemy::DecreaseHealth(float DamageTaken)
-{
-	if (CurrentHealth - DamageTaken <= 0)
-	{
-		Die();
-	}
-
-	CurrentHealth -= DamageTaken;
-}
-
-void AEnemy::Die()
+void AEnemy::Die(AActor* Causer)
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
@@ -285,6 +280,16 @@ void AEnemy::Die()
 	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CombatSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	if (Causer)
+	{
+		AMain* MainPlayer = Cast<AMain>(Causer);
+
+		if (MainPlayer)
+		{
+			MainPlayer->UpdateCombatTarget();
+		}
+	}
 }
 
 void AEnemy::Disappear()

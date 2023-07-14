@@ -132,8 +132,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeathEnd();
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	void DecreaseHealth(float DamageTaken);
-	void Die();
+	void Die(AActor* Causer);
 	void Disappear();
 	bool IsAlive();
 	

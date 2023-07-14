@@ -394,6 +394,46 @@ void AMain::Die()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
 }
 
+void AMain::UpdateCombatTarget()
+{
+	TArray<AActor*> OverlappingActors;	
+	GetOverlappingActors(OverlappingActors, EnemyFilter);
+
+	if (OverlappingActors.Num() == 0) { return; }
+
+	AEnemy* ClosestEnemy = Cast<AEnemy>(OverlappingActors[0]);
+
+	if (ClosestEnemy)
+	{
+		FVector MainPlayerLocation = GetActorLocation();
+		float MinDistance = (MainPlayerLocation - ClosestEnemy->GetActorLocation()).Size();
+
+		for (auto OverlappingActor : OverlappingActors)
+		{
+			AEnemy* Enemy = Cast<AEnemy>(OverlappingActor);
+
+			if (Enemy)
+			{	
+				float DistanceToActor = (MainPlayerLocation - Enemy->GetActorLocation()).Size();
+
+				if (DistanceToActor < MinDistance)
+				{
+					MinDistance = DistanceToActor;
+					ClosestEnemy = Enemy;
+				}
+			}
+		}
+
+		if (MainPlayerController)
+		{
+			MainPlayerController->DisplayEnemyHealthBar();
+		}
+
+		SetCombatTarget(ClosestEnemy);
+		bHasCombatTarget = true;
+	}
+}
+
 void AMain::DeathEnd()
 {
     GetMesh()->bPauseAnims = true; // Stop Animation
@@ -452,6 +492,7 @@ float AMain::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACo
             Enemy->bHasValidTarget = false;
         }
     }
+	
     return DamageAmount;
 }
 
