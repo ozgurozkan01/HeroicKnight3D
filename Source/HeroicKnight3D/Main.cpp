@@ -390,8 +390,8 @@ void AMain::Die()
 	}
 
 	SetMovementStatus(EMovementStatus::EMS_Dead);
-	EquippedWeapon->CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	/*EquippedWeapon->CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
 }
 
 void AMain::DeathEnd()
