@@ -66,6 +66,9 @@ void AEnemy::BeginPlay()
 	CombatCollision->SetCollisionObjectType(ECC_WorldDynamic);
 	CombatCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
 	CombatCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 // Called every frame
