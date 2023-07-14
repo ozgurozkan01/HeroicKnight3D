@@ -19,7 +19,7 @@ enum class EEnemyMovementStatus : uint8
 	EMS_MoveToTarget	UMETA(DisplayName = "MoveToTarget"),
 	EMS_Attacking		UMETA(DisplayName = "Attacking"),
 	EMS_Dead			UMETA(DisplayName = "Dead"),
-	
+
 	EMS_MAX				UMETA(DisplayName = "DefaultMAX")
 };
 
@@ -34,7 +34,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
 	EEnemyMovementStatus EnemyMovementStatus;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 	USphereComponent* AgroSphere;
 
@@ -43,7 +43,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 	UBoxComponent* CombatCollision;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 	AAIController* AIController;
 
@@ -64,7 +64,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
 	TSubclassOf<UDamageType> DamageType;
-	
+
 	FTimerHandle AttackTimerHandle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
@@ -85,12 +85,12 @@ public:
 	bool bAttacking;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
 	bool bHasValidTarget;
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -99,7 +99,7 @@ public:
 
 	FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus CurrentStatus) { EnemyMovementStatus = CurrentStatus; }
 	FORCEINLINE EEnemyMovementStatus GetEnemyMovementStatus() { return EnemyMovementStatus; };
-	  
+
 	UFUNCTION()
 	virtual void AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	UFUNCTION()
@@ -131,5 +131,5 @@ public:
 	void Die();
 	void Disappear();
 	bool IsAlive();
-	
+
 };

@@ -23,24 +23,25 @@ AEnemy::AEnemy()
 	AgroSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AgroSphere"));
 	AgroSphere->SetupAttachment(GetRootComponent());
 	AgroSphere->SetSphereRadius(600.f);
-	
+	AgroSphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
+
 	CombatSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CombatSphere"));
 	CombatSphere->SetupAttachment(GetRootComponent());
 	CombatSphere->SetSphereRadius(100.f);
 
 	CombatCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("CombatCollision"));
-	CombatCollision->SetupAttachment(GetMesh(), FName("EnemySocket")); 
-	
+	CombatCollision->SetupAttachment(GetMesh(), FName("EnemySocket"));
+
 	bOverlappingCombatSphere = false;
 	bHasValidTarget = false;
-		
+
 	MaxHealth = 100.f;
 	CurrentHealth = MaxHealth;
 	Damage = 10.f;
 	MinAttackDelayTime = 0.5f;
 	MaxAttackDelayTime = 1.5f;
 	DestroyDelay = 3.f;
-	
+
 	EnemyMovementStatus = EEnemyMovementStatus::EMS_Idle;
 }
 
@@ -50,10 +51,10 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 
 	AIController = Cast<AAIController>(GetController());
-	
+
 	AgroSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::AgroSphereOnOverlapBegin);
 	AgroSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AgroSphereOnOverlapEnd);
-	
+
 	CombatSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::CombatSphereOnOverlapBegin);
 	CombatSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::CombatSphereOnOverlapEnd);
 
@@ -85,7 +86,11 @@ void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
-		MoveToTarget(MainPlayer);
+		if (MainPlayer)
+		{
+			MoveToTarget(MainPlayer);
+
+		}
 	}
 }
 void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -101,8 +106,8 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 			{
 				MainPlayer->SetCombatTarget(nullptr);
 			}
-			
-			
+
+
 			SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Idle);
 			MainPlayer->SetHasCombatTarget(false);
 
@@ -110,7 +115,7 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 			{
 				MainPlayer->MainPlayerController->RemoveEnemyHealthBar();
 			}
-			
+
 			if (AIController)
 			{
 				AIController->StopMovement();
@@ -129,13 +134,13 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 			MainPlayer->SetCombatTarget(this);
 			MainPlayer->SetHasCombatTarget(true);
 			bHasValidTarget = true;
-			
+
 			if (MainPlayer->MainPlayerController)
 			{
 				MainPlayer->MainPlayerController->DisplayEnemyHealthBar();
 			}
-			
-			CombatTarget = MainPlayer; // Reference to pass move to target in BP 
+
+			CombatTarget = MainPlayer; // Reference to pass move to target in BP
 			bOverlappingCombatSphere = true; // controller which executes MoveToTarget() function
 
 			Attack();
@@ -151,12 +156,9 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 		if(MainPlayer)
 		{
 			bOverlappingCombatSphere = false;
+			MoveToTarget(MainPlayer);
+			CombatTarget = nullptr;
 
-			if (EnemyMovementStatus != EEnemyMovementStatus::EMS_Attacking)
-			{
-				MoveToTarget(MainPlayer);
-				CombatTarget = nullptr;
-			}
 			GetWorldTimerManager().ClearTimer(AttackTimerHandle); // When attack is stoppping, then we clean up the timer.
 		}
 	}
@@ -194,7 +196,7 @@ void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 void AEnemy::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	
+
 }
 
 void AEnemy::MoveToTarget(AMain* MainPlayer)
@@ -216,7 +218,7 @@ void AEnemy::MoveToTarget(AMain* MainPlayer)
 void AEnemy::Attack()
 {
 	if (!IsAlive() || !bHasValidTarget) { return; } // Enemy is dead
-	
+
 	if (AIController)
 	{
 		// Should not move when attacking starts
@@ -276,7 +278,7 @@ void AEnemy::Die()
 	}
 
 	SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Dead);
-  
+
 	// When Enemy is dead , then we close the all collisions.
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
