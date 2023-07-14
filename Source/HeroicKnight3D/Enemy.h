@@ -81,11 +81,13 @@ public:
 	float Damage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	float DestroyDelay;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
+	float AnimationPlayRate;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
 	bool bAttacking;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
 	bool bHasValidTarget;
-
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

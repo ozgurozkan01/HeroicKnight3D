@@ -41,7 +41,8 @@ AEnemy::AEnemy()
 	MinAttackDelayTime = 0.5f;
 	MaxAttackDelayTime = 1.5f;
 	DestroyDelay = 3.f;
-
+	AnimationPlayRate = 1.f;
+	
 	EnemyMovementStatus = EEnemyMovementStatus::EMS_Idle;
 }
 
@@ -234,7 +235,7 @@ void AEnemy::Attack()
 
 		if (AnimInstance)
 		{
-			AnimInstance->Montage_Play(CombatMontage, 1.35f);
+			AnimInstance->Montage_Play(CombatMontage, AnimationPlayRate);
 			AnimInstance->Montage_JumpToSection("Attack", CombatMontage);
 		}
 	}
