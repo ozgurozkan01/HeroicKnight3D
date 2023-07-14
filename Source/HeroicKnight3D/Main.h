@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+ // Fill out your copyright notice in the Description page of Project Settings.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -21,7 +20,7 @@ enum class EMovementStatus : uint8
 	EMS_Sprinting	UMETA(DisplayName = "Sprinting"),
 	EMS_Dead	UMETA(DisplayName = "Dead"),
 
-	EMS_MAX			UMETA(DisplayName = "DefaultMAX") 
+	EMS_MAX			UMETA(DisplayName = "DefaultMAX")
 };
 
 UENUM(BlueprintType)
@@ -34,7 +33,7 @@ enum class EStaminaStatus : uint8
 
 	ESS_MAX					UMETA(DisplayName = "DefaultMAX")
 };
-  
+
 UCLASS()
 class HEROICKNIGHT3D_API AMain : public ACharacter
 {
@@ -48,7 +47,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -64,14 +63,14 @@ public:
 	void LMBDown();
 	void LMBUp();
 
-	
+
 	void SetMovementStatus(EMovementStatus CurrentStatus);
 	void SetStaminaLevel();
-	
+
 	void DecrementHealth(float TakenDamage);
 	void IncrementCoin(int32 TakenCoin);
 	void Attack();
-	
+
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
 	UFUNCTION(BlueprintCallable)
@@ -79,7 +78,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlaySwingSound();
 	void Die();
-	
+
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
 	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
 	FORCEINLINE AWeapon* GetEquippedWeapon() { return EquippedWeapon;}
@@ -87,7 +86,7 @@ public:
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
 	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
 	FORCEINLINE void SetHasCombatTarget(bool HasCombatTarget) { bHasCombatTarget = HasCombatTarget; }
-	
+
 	void SetInterpToEnemy(bool bInterpTo);
 	void SetEquippedWeapon(AWeapon* WeaponToSet);
 	void InterpRotationToTarget(float& DeltaTime);
@@ -95,8 +94,8 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 	virtual void Jump() override;
 	bool IsAlive();
-	
-	
+
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
 
@@ -123,7 +122,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
 	AEnemy* CombatTarget;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Items")
 	AItem* ActiveOverlappingItem;
 
@@ -132,13 +131,13 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items")
 	UParticleSystem* HitParticles;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")
 	USoundCue* HitSound;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
 	AMainPlayerController* MainPlayerController;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bShiftKeyDown;
 
@@ -155,9 +154,9 @@ public:
 	bool bMoveForward;
 	bool bMoveRight;
 
-	
+
 	float InterpSpeed;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Movement")
 	float SprintingSpeed;
 

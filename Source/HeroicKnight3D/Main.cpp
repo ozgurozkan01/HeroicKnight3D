@@ -28,7 +28,7 @@ AMain::AMain()
 	CameraBoom->TargetArmLength = 750.f;
 	CameraBoom->bUsePawnControlRotation = true; // Rotation of Pawn which is applied by Controller
 	CameraBoom->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
-	
+
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
@@ -40,7 +40,7 @@ AMain::AMain()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Arrange rotation through movement direction ... 
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Arrange rotation through movement direction ...
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 650.f, 0.f); // ... at this rate
 	GetCharacterMovement()->JumpZVelocity = 650.f; // Designate jump velocity
 	GetCharacterMovement()->AirControl = 0.1f; // rate of direction control of player in the air
@@ -55,7 +55,7 @@ AMain::AMain()
 	SprintingSpeed = 1000.f;
 	RunningSpeed = 600.f;
 	InterpSpeed = 10.f;
-	
+
 	bShiftKeyDown = false;
 	bLMBDown = false;
 	bAttacking = false;
@@ -63,7 +63,7 @@ AMain::AMain()
 	bHasCombatTarget = false;
 	bMoveForward = false;
 	bMoveRight = false;
-	
+
 	MovementStatus = EMovementStatus::EMS_Normal;
 	StaminaStatus = EStaminaStatus::ESS_Normal;
 }
@@ -87,7 +87,7 @@ void AMain::Tick(float DeltaTime)
 
 	SetStaminaLevel();
 	InterpRotationToTarget(DeltaTime);
-	
+
 	if (CombatTarget)
 	{
 		CombatTargetLocation = CombatTarget->GetActorLocation();
@@ -110,7 +110,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Sprinting", IE_Released, this, &AMain::ShiftKeyUp);
 	PlayerInputComponent->BindAction("LMB", IE_Pressed, this, &AMain::LMBDown);
 	PlayerInputComponent->BindAction("LMB", IE_Released, this, &AMain::LMBUp);
-	
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMain::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMain::MoveRight);
 	PlayerInputComponent->BindAxis("TurnRate", this, &AMain::TurnAtRate);
@@ -127,7 +127,6 @@ void AMain::SetStaminaLevel()
 
 		if (bShiftKeyDown && (bMoveForward || bMoveRight))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Test 1"));
 			if (CurrentStamina - DeltaStamina <= MinSprintStamina)
 			{
 				SetStaminaStatus(EStaminaStatus::ESS_BelowMinimum);
@@ -142,7 +141,6 @@ void AMain::SetStaminaLevel()
 
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Test 2"));
 			if(CurrentStamina + DeltaStamina >= MaxStamina)
 			{
 				CurrentStamina = MaxStamina;
@@ -155,11 +153,10 @@ void AMain::SetStaminaLevel()
 			SetMovementStatus(EMovementStatus::EMS_Normal);
 		}
 		break;
-		
+
 	case EStaminaStatus::ESS_BelowMinimum:
 		if (bShiftKeyDown)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Test 3"));
 			if (CurrentStamina - DeltaStamina <= 0)
 			{
 				SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
@@ -178,13 +175,12 @@ void AMain::SetStaminaLevel()
 				else
 				{
 					SetMovementStatus(EMovementStatus::EMS_Normal);
-				}	
+				}
 			}
 		}
 
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Test 4"));
 			if (CurrentStamina + DeltaStamina >= MinSprintStamina)
 			{
 				SetStaminaStatus(EStaminaStatus::ESS_Normal);
@@ -198,14 +194,12 @@ void AMain::SetStaminaLevel()
 
 		if (bShiftKeyDown && (bMoveForward || bMoveRight))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Test 5"));
 
 			CurrentStamina = 0.f;
 		}
 
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Test 6"));
 			SetStaminaStatus(EStaminaStatus::ESS_ExhaustedRecoviring);
 			CurrentStamina += DeltaStamina;
 		}
@@ -213,7 +207,6 @@ void AMain::SetStaminaLevel()
 		break;
 	case EStaminaStatus::ESS_ExhaustedRecoviring:
 
-		UE_LOG(LogTemp, Warning, TEXT("Test 7"));
 		if (CurrentStamina + DeltaStamina >= MinSprintStamina)
 		{
 			SetStaminaStatus(EStaminaStatus::ESS_Normal);
@@ -225,12 +218,12 @@ void AMain::SetStaminaLevel()
 	default:
 		;
 	}
-}  
+}
 
 void AMain::MoveForward(float InputValue)
 {
 	bMoveForward = false;
-	
+
 	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
@@ -258,7 +251,7 @@ void AMain::MoveRight(float InputValue)
 		AddMovementInput(Direction, InputValue);
 		bMoveRight = true;
 	}
-} 
+}
 
 void AMain::TurnAtRate(float Rate)
 {
@@ -289,7 +282,7 @@ void AMain::LMBDown()
 	bLMBDown = true;
 
 	if (!IsAlive()) { return; }
-	
+
 	if (ActiveOverlappingItem)
 	{
 		AWeapon* CurrentWeapon = Cast<AWeapon>(ActiveOverlappingItem);
@@ -387,7 +380,7 @@ void AMain::PlaySwingSound()
 void AMain::Die()
 {
 	if (!IsAlive()) {return;}
-	
+
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	if(AnimInstance)
@@ -397,81 +390,81 @@ void AMain::Die()
 	}
 
 	SetMovementStatus(EMovementStatus::EMS_Dead);
-	/*EquippedWeapon->CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);*/
+	EquippedWeapon->CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AMain::DeathEnd()
 {
-	GetMesh()->bPauseAnims = true; // Stop Animation
-	GetMesh()->bNoSkeletonUpdate = true; // Stop updating the mesh properties 
+    GetMesh()->bPauseAnims = true; // Stop Animation
+    GetMesh()->bNoSkeletonUpdate = true; // Stop updating the mesh properties
 }
 
 void AMain::SetInterpToEnemy(bool bInterpTo)
 {
-	bInterpToEnemy = bInterpTo;
+    bInterpToEnemy = bInterpTo;
 }
 
 void AMain::SetEquippedWeapon(AWeapon* WeaponToSet)
 {
-	if (EquippedWeapon)
-	{
-		EquippedWeapon->Destroy();
-	}
+    if (EquippedWeapon)
+    {
+        EquippedWeapon->Destroy();
+    }
 
-	EquippedWeapon = WeaponToSet;
+    EquippedWeapon = WeaponToSet;
 }
 
 void AMain::InterpRotationToTarget(float& DeltaTime)
 {
-	// this function is making to rotate character to target
-	if (bInterpToEnemy && CombatTarget)
-	{
-		FRotator LookAtYaw = GetInterpRotationYaw(CombatTarget->GetActorLocation());
-		FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), LookAtYaw, DeltaTime, InterpSpeed);
+    // this function is making to rotate character to target
+    if (bInterpToEnemy && CombatTarget)
+    {
+        FRotator LookAtYaw = GetInterpRotationYaw(CombatTarget->GetActorLocation());
+        FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), LookAtYaw, DeltaTime, InterpSpeed);
 
-		SetActorRotation(InterpRotation);
-	}
+        SetActorRotation(InterpRotation);
+    }
 }
 
 FRotator AMain::GetInterpRotationYaw(FVector TargetLocation)
 {
-	// this function is making to return difference of rotation transform between character and target.
-	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
-	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
+    // this function is making to return difference of rotation transform between character and target.
+    FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
+    FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
 
-	return LookAtRotationYaw;
+    return LookAtRotationYaw;
 }
 
 float AMain::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
+                        AActor* DamageCauser)
 {
-	CurrentHealth -= DamageAmount;
+    CurrentHealth -= DamageAmount;
 
-	if (CurrentHealth <= 0.f)
-	{
-		Die();
+    if (CurrentHealth <= 0.f)
+    {
+        Die();
 
-		if (DamageCauser)
-		{
-			AEnemy* Enemy = Cast<AEnemy>(DamageCauser);
+        if (DamageCauser)
+        {
+            AEnemy* Enemy = Cast<AEnemy>(DamageCauser);
 
-			Enemy->bHasValidTarget = false;
-		}		
-	}
-	return DamageAmount;
+            Enemy->bHasValidTarget = false;
+        }
+    }
+    return DamageAmount;
 }
 
 void AMain::Jump()
 {
-	// Jump function in Unreal Engine is virtual. So it can be overrided.
-	// We override it, cause to check character is alive
-	if (!IsAlive()) { return; }
+    // Jump function in Unreal Engine is virtual. So it can be overrided.
+    // We override it, cause to check character is alive
+    if (!IsAlive()) { return; }
 
-	Super::Jump();
+    Super::Jump();
 }
 
 bool AMain::IsAlive()
 {
-	return MovementStatus != EMovementStatus::EMS_Dead;
+    return MovementStatus != EMovementStatus::EMS_Dead;
 }
