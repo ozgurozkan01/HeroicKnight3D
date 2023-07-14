@@ -107,15 +107,10 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 			{
 				MainPlayer->SetCombatTarget(nullptr);
 			}
-
-
+			
 			SetEnemyMovementStatus(EEnemyMovementStatus::EMS_Idle);
 			MainPlayer->SetHasCombatTarget(false);
-
-			if (MainPlayer->MainPlayerController)
-			{
-				MainPlayer->MainPlayerController->RemoveEnemyHealthBar();
-			}
+			MainPlayer->UpdateCombatTarget();
 
 			if (AIController)
 			{
@@ -136,10 +131,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 			MainPlayer->SetHasCombatTarget(true);
 			bHasValidTarget = true;
 
-			if (MainPlayer->MainPlayerController)
-			{
-				MainPlayer->MainPlayerController->DisplayEnemyHealthBar();
-			}
+			MainPlayer->UpdateCombatTarget();
 
 			CombatTarget = MainPlayer; // Reference to pass move to target in BP
 			bOverlappingCombatSphere = true; // controller which executes MoveToTarget() function
@@ -150,7 +142,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 }
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OtherActor && IsAlive())
+	if (OtherActor && IsAlive() && OtherComp)
 	{
 		AMain* MainPlayer = Cast<AMain>(OtherActor);
 
@@ -160,6 +152,25 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 			MoveToTarget(MainPlayer);
 			CombatTarget = nullptr;
 
+			if (MainPlayer->CombatTarget)
+			{
+			
+				MainPlayer->SetCombatTarget(nullptr);
+				MainPlayer->bHasCombatTarget = false;
+				MainPlayer->UpdateCombatTarget();
+			}
+
+			// We ended collision, then remove the health bar of enemy.
+			if (MainPlayer->MainPlayerController)
+			{
+				USkeletalMeshComponent* MainPlayerMesh = Cast<USkeletalMeshComponent>(OtherComp);
+
+				if (MainPlayerMesh)
+				{
+					MainPlayer->MainPlayerController->RemoveEnemyHealthBar();
+				}
+			}
+			
 			GetWorldTimerManager().ClearTimer(AttackTimerHandle); // When attack is stoppping, then we clean up the timer.
 		}
 	}

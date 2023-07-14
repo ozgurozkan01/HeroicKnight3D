@@ -320,11 +320,6 @@ void AMain::SetMovementStatus(EMovementStatus CurrentStatus)
 	}
 }
 
-void AMain::DecrementHealth(float TakenDamage)
-{
-
-}
-
 void AMain::IncrementCoin(int32 TakenCoin)
 {
 	Coin += TakenCoin;
@@ -399,7 +394,15 @@ void AMain::UpdateCombatTarget()
 	TArray<AActor*> OverlappingActors;	
 	GetOverlappingActors(OverlappingActors, EnemyFilter);
 
-	if (OverlappingActors.Num() == 0) { return; }
+	if (OverlappingActors.Num() == 0)
+	{
+		// If no another enemy then remove the health bar of enemy.
+		if (MainPlayerController)
+		{
+			MainPlayerController->RemoveEnemyHealthBar();
+		}
+		return;
+	}
 
 	AEnemy* ClosestEnemy = Cast<AEnemy>(OverlappingActors[0]);
 

@@ -67,7 +67,6 @@ public:
 	void SetMovementStatus(EMovementStatus CurrentStatus);
 	void SetStaminaLevel();
 
-	void DecrementHealth(float TakenDamage);
 	void IncrementCoin(int32 TakenCoin);
 	void Attack();
 
@@ -170,7 +169,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
 	FVector CombatTargetLocation;
-
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	TSubclassOf<AEnemy> EnemyFilter;
 	
 private:
