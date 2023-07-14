@@ -67,6 +67,7 @@ void AEnemy::BeginPlay()
 	CombatCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
 	CombatCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
+	// Capsule and the mesh cannot affect or block the camera 
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
