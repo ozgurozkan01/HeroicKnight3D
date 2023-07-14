@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "Sound/SoundCue.h"
@@ -239,7 +240,6 @@ void AEnemy::Attack()
 			AnimInstance->Montage_JumpToSection("Attack", CombatMontage);
 		}
 	}
-
 }
 
 void AEnemy::PlaySwingSound()
