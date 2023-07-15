@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "SpawnVolume.generated.h"
 
-class AMyPawn;
 class UBoxComponent;
 
 UCLASS()
@@ -22,8 +21,16 @@ public:
 	UBoxComponent* SpawnVolume;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Spawning")
-	TSubclassOf<AMyPawn> PawnToSpawn;
+	TSubclassOf<AActor> Actor_1;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Spawning")
+	TSubclassOf<AActor> Actor_2;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Spawning")
+	TSubclassOf<AActor> Actor_3;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Spawning")
+	TSubclassOf<AActor> Actor_4;
 
+	TArray<TSubclassOf<AActor>> SpawnArray;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Spawning")
 	UParticleSystem* SpawningParticleEffect;
 	
@@ -38,8 +45,11 @@ public:
 	UFUNCTION(BlueprintPure, Category="Spawning")
 	FVector GetSpawnPoint();
 
+	UFUNCTION(BlueprintPure, Category="Spawning")
+	TSubclassOf<AActor> GetSpawnActor();
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Spawning")
-	void SpawnOurPawn(UClass* SpawnedPawn, const FVector& Location);
+	void SpawnOurActor(UClass* SpawnedPawn, const FVector& Location);
 	
 	UFUNCTION(BlueprintCallable, Category="Spawning")
 	void PawnSpawnedEffect(const FVector& Location);

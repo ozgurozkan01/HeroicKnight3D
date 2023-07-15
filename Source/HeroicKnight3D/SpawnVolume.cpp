@@ -3,7 +3,6 @@
 
 #include "SpawnVolume.h"
 
-#include "MyPawn.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -23,14 +22,28 @@ ASpawnVolume::ASpawnVolume()
 void ASpawnVolume::BeginPlay()
 {
 	Super::BeginPlay();
-	SpawnOurPawn(PawnToSpawn, GetSpawnPoint());
+
+	
+	
+	if (Actor_1 && Actor_2 && Actor_3 && Actor_4)
+	{
+		SpawnArray.Add(Actor_1);
+		SpawnArray.Add(Actor_2);
+		SpawnArray.Add(Actor_3);
+		SpawnArray.Add(Actor_4);
+	}
+	
+	/*
+	FVector SpawnPoint = GetSpawnPoint();
+	TSubclassOf<AActor> SpawnActor = GetSpawnActor();
+	
+	SpawnOurActor(SpawnActor, SpawnPoint);*/
 }
 
 // Called every frame
 void ASpawnVolume::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 FVector ASpawnVolume::GetSpawnPoint()
@@ -44,16 +57,25 @@ FVector ASpawnVolume::GetSpawnPoint()
 	return SpawnPoint;
 }
 
+TSubclassOf<AActor> ASpawnVolume::GetSpawnActor()
+{
+	if (SpawnArray.Num() == 0) { return nullptr;}
+
+	int32 Selection = FMath::RandRange(0, SpawnArray.Num() - 1);
+
+	return SpawnArray[Selection];
+}
+
 void ASpawnVolume::PawnSpawnedEffect(const FVector& Location)
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SpawningParticleEffect, Location, FRotator::ZeroRotator);
 }
 
-void ASpawnVolume::SpawnOurPawn_Implementation(UClass* SpawnedPawn, const FVector& Location)
+void ASpawnVolume::SpawnOurActor_Implementation(UClass* SpawnedPawn, const FVector& Location)
 {
 	UWorld* GameWorld = GetWorld();
 
 	if(SpawnedPawn == nullptr || GameWorld == nullptr) return;
 	
-	GameWorld->SpawnActor<AMyPawn>(PawnToSpawn, Location, FRotator::ZeroRotator);
+	GameWorld->SpawnActor<AActor>(SpawnedPawn, Location, FRotator::ZeroRotator);
 }
