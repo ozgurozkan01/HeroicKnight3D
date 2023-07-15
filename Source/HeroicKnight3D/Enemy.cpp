@@ -76,7 +76,6 @@ void AEnemy::BeginPlay()
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -221,6 +220,7 @@ void AEnemy::MoveToTarget(AMain* MainPlayer)
 
 	if (AIController)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Move To Target"));
 		FAIMoveRequest MoveRequest;
 		MoveRequest.SetGoalActor(MainPlayer);
 		MoveRequest.SetAcceptanceRadius(5.f);
@@ -228,6 +228,11 @@ void AEnemy::MoveToTarget(AMain* MainPlayer)
 		FNavPathSharedPtr NavPath;
 
 		AIController->MoveTo(MoveRequest, &NavPath);
+	}
+
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Not Move To Target"));
 	}
 }
 

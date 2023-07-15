@@ -3,6 +3,8 @@
 
 #include "SpawnVolume.h"
 
+#include "AIController.h"
+#include "Enemy.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -77,5 +79,21 @@ void ASpawnVolume::SpawnOurActor_Implementation(UClass* SpawnedPawn, const FVect
 
 	if(SpawnedPawn == nullptr || GameWorld == nullptr) return;
 	
-	GameWorld->SpawnActor<AActor>(SpawnedPawn, Location, FRotator::ZeroRotator);
+	AActor* Actor = GameWorld->SpawnActor<AActor>(SpawnedPawn, Location, FRotator::ZeroRotator);
+
+	if (Actor)
+	{
+		AEnemy* SpawnedEnemy = Cast<AEnemy>(Actor);
+
+		if (SpawnedEnemy)
+		{
+			SpawnedEnemy->SpawnDefaultController();
+			AAIController* AIController = Cast<AAIController>(SpawnedEnemy->GetController());
+
+			if (AIController)
+			{
+				SpawnedEnemy->AIController = AIController;
+			}
+		}
+	}
 }
