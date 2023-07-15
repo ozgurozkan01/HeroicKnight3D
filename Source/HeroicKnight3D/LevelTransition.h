@@ -20,8 +20,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Level")
 	UBoxComponent* LevelTransitionVolume;
 
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Level")
 	UBillboardComponent* BillboardComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Level")
+	FName TransitionLevelName;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -29,6 +32,8 @@ protected:
 
 public:	
 
+	UFUNCTION()
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-	
+
+	void SwitchLevel(FName LevelName);
 };
