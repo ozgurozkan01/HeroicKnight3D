@@ -62,29 +62,9 @@ public:
 	void ShiftKeyUp();
 	void LMBDown();
 	void LMBUp();
-
-
 	void SetMovementStatus(EMovementStatus CurrentStatus);
 	void SetStaminaLevel();
-
-	void IncrementCoin(int32 TakenCoin);
 	void Attack();
-
-	UFUNCTION(BlueprintCallable)
-	void AttackEnd();
-	UFUNCTION(BlueprintCallable)
-	void DeathEnd();
-	UFUNCTION(BlueprintCallable)
-	void PlaySwingSound();
-
-	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
-	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
-	FORCEINLINE AWeapon* GetEquippedWeapon() { return EquippedWeapon;}
-	FORCEINLINE void SetActiveOverlappingItem(AItem* ItemToSet) { ActiveOverlappingItem = ItemToSet; }
-	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
-	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
-	FORCEINLINE void SetHasCombatTarget(bool HasCombatTarget) { bHasCombatTarget = HasCombatTarget; }
-
 	void SetInterpToEnemy(bool bInterpTo);
 	void SetEquippedWeapon(AWeapon* WeaponToSet);
 	void InterpRotationToTarget(float& DeltaTime);
@@ -94,6 +74,26 @@ public:
 	bool IsAlive();
 	void Die();
 	void UpdateCombatTarget();
+	
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
+	UFUNCTION(BlueprintCallable)
+	void PlaySwingSound();
+	UFUNCTION(BlueprintCallable)
+	void IncrementCoin(int32 TakenCoin);
+	UFUNCTION(BlueprintCallable)
+	void IncrementHealth(float TakenPotion);
+
+	
+	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
+	FORCEINLINE UCameraComponent* GetCamera() const {return FollowCamera;}
+	FORCEINLINE AWeapon* GetEquippedWeapon() { return EquippedWeapon;}
+	FORCEINLINE void SetActiveOverlappingItem(AItem* ItemToSet) { ActiveOverlappingItem = ItemToSet; }
+	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
+	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
+	FORCEINLINE void SetHasCombatTarget(bool HasCombatTarget) { bHasCombatTarget = HasCombatTarget; }
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
