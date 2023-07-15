@@ -325,6 +325,19 @@ void AMain::IncrementCoin(int32 TakenCoin)
 	Coin += TakenCoin;
 }
 
+void AMain::IncrementHealth(float TakenPotion)
+{
+	if (CurrentHealth + TakenPotion >= MaxHealth)
+	{
+		CurrentHealth = MaxHealth;
+	}
+
+	else
+	{
+		CurrentHealth += TakenPotion;
+	}
+}
+
 void AMain::Attack()
 {
 	if (!bAttacking && MovementStatus != EMovementStatus::EMS_Dead)

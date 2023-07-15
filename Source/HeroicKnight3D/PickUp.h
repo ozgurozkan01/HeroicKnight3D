@@ -23,4 +23,8 @@ public:
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
+	// We created a impelementable event function,
+	// Cause we use this event more than one BP class.
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPickUpBP(AMain* MainPlayer);
 };

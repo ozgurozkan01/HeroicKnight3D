@@ -23,6 +23,8 @@ void APickUp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 	if(MainPlayer == nullptr) { return; }
 
+	OnPickUpBP(MainPlayer);
+	
 	if (OverlapParticle == nullptr) { return; }
 	
 	if (OverlapSound == nullptr) { return; }
@@ -30,7 +32,6 @@ void APickUp::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticle, GetActorLocation(), FRotator(0.f));
 	UGameplayStatics::PlaySound2D(GetWorld(), OverlapSound);
 	
-	MainPlayer->IncrementCoin(PickedCoin);
 	Destroy();
 }
 
