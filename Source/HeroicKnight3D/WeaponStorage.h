@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "WeaponStorage.generated.h"
 
+class AWeapon;
+
 UCLASS()
 class HEROICKNIGHT3D_API AWeaponStorage : public AActor
 {
@@ -20,7 +22,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SaveData")
+	TMap<FString, TSubclassOf<AWeapon>> WeaponMap;
 };
