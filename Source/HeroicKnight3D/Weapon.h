@@ -51,6 +51,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
 	TSubclassOf<UDamageType> DamageType;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Item")
+	FString WeaponName;
+	
 	// Weapon is an actor. So it does not have any controller
 	// We are gonna use main player controller.
 	AController* WeaponInstegator;
