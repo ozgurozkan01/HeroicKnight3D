@@ -6,6 +6,8 @@
 #include "GameFramework/SaveGame.h"
 #include "GameSaveManager.generated.h"
 
+class AWeaponStorage;
+
 USTRUCT(BlueprintType)
 struct FCharacterStats
 {
@@ -31,6 +33,9 @@ struct FCharacterStats
 	
 	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
 	FRotator Rotation;
+
+	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
+	FString WeaponName;
 };
 
 UCLASS()
@@ -49,6 +54,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="SaveGame")
 	FCharacterStats CharacterStats;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="SaveGame")
+	TSubclassOf<AWeaponStorage> WeaponStorage;
 
 	UFUNCTION(BlueprintCallable)
 	void SaveGame(AMain* MainPlayer);
