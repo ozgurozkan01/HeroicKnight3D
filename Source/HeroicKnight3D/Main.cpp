@@ -4,6 +4,7 @@
 #include "Main.h"
 
 #include "Enemy.h"
+#include "GameSaveManager.h"
 #include "MainPlayerController.h"
 #include "Weapon.h"
 #include "Camera/CameraComponent.h"
@@ -75,6 +76,7 @@ void AMain::BeginPlay()
 
 	// We cast the default controller to the MainPlayerController which we created.
 	MainPlayerController = Cast<AMainPlayerController>(GetController());
+	GameSaveManager = Cast<UGameSaveManager>(UGameplayStatics::CreateSaveGameObject(UGameSaveManager::StaticClass()));
 }
 
 // Called every frame

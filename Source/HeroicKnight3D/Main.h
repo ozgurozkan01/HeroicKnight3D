@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "Main.generated.h"
 
+ class UGameSaveManager;
 class UCameraComponent;
 class USpringArmComponent;
 class AWeapon;
@@ -172,6 +173,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	TSubclassOf<AEnemy> EnemyFilter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SaveGame")
+	UGameSaveManager* GameSaveManager;
 	
 private:
 
