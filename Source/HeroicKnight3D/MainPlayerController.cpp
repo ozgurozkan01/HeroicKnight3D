@@ -109,4 +109,4 @@ void AMainPlayerController::RemoveEnemyHealthBar()
 		bEnemyHealthBarVisible = false;
 		EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);
 	}
-}
+}  

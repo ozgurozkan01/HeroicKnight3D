@@ -55,7 +55,7 @@ public:
 	void DisplayEnemyHealthBar();
 	void RemoveEnemyHealthBar();
 protected:
-
+  
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 };
