@@ -55,9 +55,6 @@ public:
 	UPROPERTY(EditAnywhere, Category="SaveGame")
 	FCharacterStats CharacterStats;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="SaveGame")
-	TSubclassOf<AWeaponStorage> WeaponStorage;
-
 	UFUNCTION(BlueprintCallable)
 	void SaveGame(AMain* MainPlayer);
 	UFUNCTION(BlueprintCallable)

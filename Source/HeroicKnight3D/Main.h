@@ -14,6 +14,8 @@ class UAnimMontage;
 class USoundCue;
 class AEnemy;
 class AMainPlayerController;
+class AWeaponStorage;
+
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
 {
@@ -176,7 +178,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SaveGame")
 	UGameSaveManager* GameSaveManager;
-	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="SaveGame")
+	TSubclassOf<AWeaponStorage> WeaponStorage;
 private:
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess = "true"), Category="Camera")

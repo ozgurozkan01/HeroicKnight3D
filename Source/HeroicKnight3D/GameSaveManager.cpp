@@ -46,16 +46,22 @@ void UGameSaveManager::LoadGame(AMain* MainPlayer, bool bSetTransform)
 	MainPlayer->MaxStamina = CharacterStats.MaxStamina;
 	MainPlayer->Coin = CharacterStats.Coins;
 
-	if (WeaponStorage)
+	UE_LOG(LogTemp, Warning, TEXT("%f"), CharacterStats.Health);	
+	UE_LOG(LogTemp, Warning, TEXT("%f"), CharacterStats.MaxHealth);	
+	UE_LOG(LogTemp, Warning, TEXT("%f"), CharacterStats.Stamina);	
+	UE_LOG(LogTemp, Warning, TEXT("%f"), CharacterStats.MaxStamina);	
+
+	
+	if (MainPlayer->WeaponStorage)
 	{
-		AWeaponStorage* Weapons = GetWorld()->SpawnActor<AWeaponStorage>(WeaponStorage);
+		AWeaponStorage* Weapons = MainPlayer->GetWorld()->SpawnActor<AWeaponStorage>(MainPlayer->WeaponStorage);
 		if (Weapons)
 		{
 			FString WeaponName = CharacterStats.WeaponName;
 
-			if (Weapons->WeaponMap[WeaponName])
+			if (Weapons->WeaponMap.Contains(WeaponName))
 			{
-				AWeapon* EquippedWeapon = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
+				AWeapon* EquippedWeapon = MainPlayer->GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
 
 				if (EquippedWeapon)
 				{
