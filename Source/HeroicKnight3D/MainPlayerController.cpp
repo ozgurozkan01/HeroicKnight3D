@@ -63,7 +63,7 @@ void AMainPlayerController::SetEnemyHealthBarProperties()
 	}
 }
 
-void AMainPlayerController::DisplayPauseMenu()
+void AMainPlayerController::DisplayPauseMenu_Implementation()
 {
 	if (PauseMenu)
 	{
@@ -72,7 +72,7 @@ void AMainPlayerController::DisplayPauseMenu()
 	}
 }
 
-void AMainPlayerController::RemovePauseMenu()
+void AMainPlayerController::RemovePauseMenu_Implementation()
 {
 	if (PauseMenu)
 	{

@@ -45,7 +45,9 @@ public:
 	
 	// Show and remove the HUD on the player screen.
 	bool bPauseMenuVisible; // Check HUD should be shown on the screen
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Widgets")
 	void DisplayPauseMenu();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Widgets")
 	void RemovePauseMenu();
 	void TogglePauseMenu();
 	
