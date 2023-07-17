@@ -54,7 +54,7 @@ public:
 	bool bEnemyHealthBarVisible; // Check HUD should be shown on the screen
 	void DisplayEnemyHealthBar();
 	void RemoveEnemyHealthBar();
-protected: 
+protected:
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
