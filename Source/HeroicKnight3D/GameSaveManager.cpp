@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "GameSaveManager.h"
 
 #include "Main.h"
@@ -37,14 +34,14 @@ void UGameSaveManager::SaveGame(AMain* MainPlayer)
 
 void UGameSaveManager::LoadGame(AMain* MainPlayer, bool bSetTransform)
 {
+	UGameSaveManager* GameSaveManager = Cast<UGameSaveManager>(UGameplayStatics::CreateSaveGameObject(UGameSaveManager::StaticClass()));
+	GameSaveManager = Cast<UGameSaveManager>(UGameplayStatics::LoadGameFromSlot(PlayerName, PlayerIndex));
 
-	UGameplayStatics::LoadGameFromSlot(PlayerName, PlayerIndex);
-
-	MainPlayer->CurrentHealth = CharacterStats.Health;
-	MainPlayer->MaxHealth = CharacterStats.MaxHealth;
-	MainPlayer->CurrentStamina = CharacterStats.Stamina;
-	MainPlayer->MaxStamina = CharacterStats.MaxStamina;
-	MainPlayer->Coin = CharacterStats.Coins;
+	MainPlayer->CurrentHealth = GameSaveManager->CharacterStats.Health;
+	MainPlayer->MaxHealth = GameSaveManager->CharacterStats.MaxHealth;
+	MainPlayer->CurrentStamina = GameSaveManager->CharacterStats.Stamina;
+	MainPlayer->MaxStamina = GameSaveManager->CharacterStats.MaxStamina;
+	MainPlayer->Coin = GameSaveManager->CharacterStats.Coins;
 
 	UE_LOG(LogTemp, Warning, TEXT("%f"), CharacterStats.Health);	
 	UE_LOG(LogTemp, Warning, TEXT("%f"), CharacterStats.MaxHealth);	
@@ -57,7 +54,7 @@ void UGameSaveManager::LoadGame(AMain* MainPlayer, bool bSetTransform)
 		AWeaponStorage* Weapons = MainPlayer->GetWorld()->SpawnActor<AWeaponStorage>(MainPlayer->WeaponStorage);
 		if (Weapons)
 		{
-			FString WeaponName = CharacterStats.WeaponName;
+			FString WeaponName = GameSaveManager->CharacterStats.WeaponName;
 
 			if (Weapons->WeaponMap.Contains(WeaponName))
 			{
@@ -73,7 +70,7 @@ void UGameSaveManager::LoadGame(AMain* MainPlayer, bool bSetTransform)
 	
 	if (bSetTransform)
 	{
-		MainPlayer->SetActorLocation(CharacterStats.Location);
-		MainPlayer->SetActorRotation(CharacterStats.Rotation);
+		MainPlayer->SetActorLocation(GameSaveManager->CharacterStats.Location);
+		MainPlayer->SetActorRotation(GameSaveManager->CharacterStats.Rotation);
 	}
 }
