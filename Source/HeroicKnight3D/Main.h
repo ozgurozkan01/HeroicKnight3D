@@ -65,6 +65,8 @@ public:
 	void ShiftKeyUp();
 	void LMBDown();
 	void LMBUp();
+	void ESCDown();
+	void ESCUp();
 	void SetMovementStatus(EMovementStatus CurrentStatus);
 	void SetStaminaLevel();
 	void Attack();
@@ -145,7 +147,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bLMBDown;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bESCDown;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Attack")
 	bool bAttacking;
 
