@@ -69,6 +69,10 @@ void AMainPlayerController::DisplayPauseMenu_Implementation()
 	{
 		bPauseMenuVisible = true;
 		PauseMenu->SetVisibility(ESlateVisibility::Visible);
+
+		FInputModeGameAndUI InputModeGameAndUI; // Nothing but Game and UIs respond to inputs. They are not affected by inputs.
+		SetInputMode(InputModeGameAndUI);
+		bShowMouseCursor = true;
 	}
 }
 
@@ -77,7 +81,10 @@ void AMainPlayerController::RemovePauseMenu_Implementation()
 	if (PauseMenu)
 	{
 		bPauseMenuVisible = false;
-		PauseMenu->SetVisibility(ESlateVisibility::Hidden);
+
+		FInputModeGameOnly InputModeGameOnly;
+		SetInputMode(InputModeGameOnly);
+		bShowMouseCursor = false;
 	}
 }
 
