@@ -59,6 +59,8 @@ public:
 
 	void MoveForward(float InputValue);
 	void MoveRight(float InputValue);
+	/*void Turn(float InputValue);
+	void LookUp(float InputValue);*/
 	void TurnAtRate(float Rate);
 	void LookUpRate(float Rate);
 	void ShiftKeyDown();
@@ -79,6 +81,7 @@ public:
 	bool IsAlive();
 	void Die();
 	void UpdateCombatTarget();
+	bool CanMove(float InputValue);
 	
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();

@@ -229,7 +229,7 @@ void AMain::MoveForward(float InputValue)
 {
 	bMoveForward = false;
 
-	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
+	if (!CanMove(InputValue)) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -245,7 +245,7 @@ void AMain::MoveForward(float InputValue)
 void AMain::MoveRight(float InputValue)
 {
 	bMoveRight = false;
-	if (Controller == nullptr || InputValue == 0.f || bAttacking || !IsAlive()) return;
+	if (!CanMove(InputValue)) return;
 
 	const FRotator Rotation = Controller->GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -260,14 +260,20 @@ void AMain::MoveRight(float InputValue)
 
 void AMain::TurnAtRate(float Rate)
 {
-	float TurnAtRate = Rate * MouseSensitivity * GetWorld()->GetDeltaSeconds();
-	AddControllerYawInput(TurnAtRate);
+	if (CanMove(Rate))
+	{
+		float TurnAtRate = Rate * MouseSensitivity * GetWorld()->GetDeltaSeconds();
+		AddControllerYawInput(TurnAtRate);	
+	}
 }
 
 void AMain::LookUpRate(float Rate)
 {
-	float LookUpRate = Rate * MouseSensitivity * GetWorld()->GetDeltaSeconds();
-	AddControllerPitchInput(LookUpRate);
+	if (CanMove(Rate))
+	{
+		float LookUpRate = Rate * MouseSensitivity * GetWorld()->GetDeltaSeconds();
+		AddControllerPitchInput(LookUpRate);
+	}
 }
 
 void AMain::ShiftKeyDown()
@@ -288,6 +294,16 @@ void AMain::LMBDown()
 
 	if (!IsAlive()) { return; }
 
+	if (MainPlayerController)
+	{
+		if (MainPlayerController->bPauseMenuVisible) { return; }
+	}
+
+	else
+	{
+		return;
+	}
+	
 	if (ActiveOverlappingItem)
 	{
 		AWeapon* CurrentWeapon = Cast<AWeapon>(ActiveOverlappingItem);
@@ -360,7 +376,7 @@ void AMain::IncrementHealth(float TakenPotion)
 
 void AMain::Attack()
 {
-	if (!bAttacking && MovementStatus != EMovementStatus::EMS_Dead)
+	if (!bAttacking && MovementStatus != EMovementStatus::EMS_Dead && !GetMovementComponent()->IsFalling())
 	{
 		bAttacking = true;
 		SetInterpToEnemy(true);
@@ -470,6 +486,20 @@ void AMain::UpdateCombatTarget()
 	}
 }
 
+bool AMain::CanMove(float InputValue)
+{
+	if (MainPlayerController)
+	{
+		return	InputValue != 0.f &&
+				!bAttacking &&
+				IsAlive() &&
+				!MainPlayerController->bPauseMenuVisible;
+				
+	}
+
+	return false;
+}
+
 void AMain::DeathEnd()
 {
     GetMesh()->bPauseAnims = true; // Stop Animation
@@ -538,6 +568,16 @@ void AMain::Jump()
     // We override it, cause to check character is alive
     if (!IsAlive()) { return; }
 
+    if (MainPlayerController)
+    {
+	    if (MainPlayerController->bPauseMenuVisible) { return; }
+    }
+
+    else
+    {
+	    return;
+    }
+	
     Super::Jump();
 }
 
