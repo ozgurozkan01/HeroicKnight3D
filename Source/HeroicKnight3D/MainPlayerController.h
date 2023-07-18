@@ -6,9 +6,10 @@
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
 
-/**
- * 
- */
+class UGameSaveManager;
+class UButton;
+class AMain;
+
 UCLASS()
 class HEROICKNIGHT3D_API AMainPlayerController : public APlayerController
 {
@@ -38,6 +39,19 @@ public:
 	/* Holder to widget after creating it */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Widgets")
 	UUserWidget* PauseMenu;
+
+	UGameSaveManager* GameSaveManager;
+
+	AMain* MainPlayer;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Button")
+	UButton* SaveGameButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Button")
+	UButton* QuitGameButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Button")
+	UButton* LoadGameButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Button")
+	UButton* ResumeGameButton;
 	
 	FVector EnemyLocation;
 	
@@ -54,6 +68,16 @@ public:
 	bool bEnemyHealthBarVisible; // Check HUD should be shown on the screen
 	void DisplayEnemyHealthBar();
 	void RemoveEnemyHealthBar();
+
+	UFUNCTION()
+	void SaveGame();
+	UFUNCTION()
+	void LoadGame();
+	UFUNCTION()
+	void ResumeGame();
+	UFUNCTION()
+	void QuitGame();
+	
 protected:
   
 	virtual void BeginPlay() override;

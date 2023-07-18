@@ -2,12 +2,20 @@
 
 
 #include "MainPlayerController.h"
+#include "GameSaveManager.h"
+#include "Main.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
+#include "GameFramework/SaveGame.h"
+#include "Kismet/GameplayStatics.h"
 
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GameSaveManager = Cast<UGameSaveManager>(UGameplayStatics::CreateSaveGameObject(UGameSaveManager::StaticClass()));
+	MainPlayer = Cast<AMain>(UGameplayStatics::GetPlayerPawn(this, 0));
+	
 	if (HUDOverlayAsset == nullptr) {return;}
 
 	HUDOverlay = CreateWidget<UUserWidget>(this, HUDOverlayAsset);
@@ -37,6 +45,20 @@ void AMainPlayerController::BeginPlay()
 	{
 		PauseMenu->AddToViewport();
 		PauseMenu->SetVisibility(ESlateVisibility::Hidden);
+
+		SaveGameButton = Cast<UButton>(PauseMenu->GetWidgetFromName(FName("SaveGameButton")));
+		QuitGameButton = Cast<UButton>(PauseMenu->GetWidgetFromName(FName("QuitGameButton")));
+		LoadGameButton = Cast<UButton>(PauseMenu->GetWidgetFromName(FName("LoadGameButton")));
+		ResumeGameButton = Cast<UButton>(PauseMenu->GetWidgetFromName(FName("ResumeButton")));
+
+		if (SaveGameButton && QuitGameButton && LoadGameButton && ResumeGameButton)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Successfully"));
+			SaveGameButton->OnClicked.AddDynamic(this, &AMainPlayerController::SaveGame);
+			LoadGameButton->OnClicked.AddDynamic(this, &AMainPlayerController::LoadGame);
+			QuitGameButton->OnClicked.AddDynamic(this, &AMainPlayerController::QuitGame);
+			ResumeGameButton->OnClicked.AddDynamic(this, &AMainPlayerController::ResumeGame);
+		}
 	}
 }
 
@@ -116,4 +138,33 @@ void AMainPlayerController::RemoveEnemyHealthBar()
 		bEnemyHealthBarVisible = false;
 		EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);
 	}
-}  
+}
+
+void AMainPlayerController::SaveGame()
+{
+	if (GameSaveManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Saved!"));
+		GameSaveManager->SaveGame(MainPlayer);
+	}
+}
+
+void AMainPlayerController::LoadGame()
+{
+	if (GameSaveManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Loaded!"));
+		GameSaveManager->LoadGame(MainPlayer, true);
+	}
+}
+
+void AMainPlayerController::ResumeGame()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Resume Game!!!"));
+	RemovePauseMenu();
+}
+
+void AMainPlayerController::QuitGame()
+{
+	ConsoleCommand("quit");
+}
