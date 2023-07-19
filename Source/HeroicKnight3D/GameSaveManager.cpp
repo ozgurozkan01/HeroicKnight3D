@@ -81,19 +81,18 @@ void UGameSaveManager::LoadGame(AMain* MainPlayer, bool bSetTransform)
 	MainPlayer->GetMesh()->bPauseAnims = false;
 	MainPlayer->GetMesh()->bNoSkeletonUpdate = false;
 
-	
-	
-	/*
 	if (GameSaveManager->CharacterStats.LevelName != TEXT(""))
 	{
-		ALevelTransition* LevelSwitch = Cast<ALevelTransition>(LevelTransition);
 
-		if (LevelSwitch)
+		ALevelTransition* LevelTransition = Cast<ALevelTransition>(MainPlayer->GetWorld()->SpawnActor<ALevelTransition>());
+		if (LevelTransition)
 		{
-			FName LevelName(CharacterStats.LevelName);
-			LevelSwitch->SwitchLevel(LevelName);
+			UE_LOG(LogTemp, Warning, TEXT("Level Transition valid!"));
+			UE_LOG(LogTemp, Warning, TEXT("Loaded TEST!"));
+			FName LevelName(GameSaveManager->CharacterStats.LevelName);
+			LevelTransition->SwitchLevel(LevelName);
 		}
-	}*/
+	}
 }
 
 void UGameSaveManager::LoadGameNoSwitch(AMain* MainPlayer)

@@ -59,9 +59,6 @@ public:
 	UPROPERTY(EditAnywhere, Category="SaveGame")
 	FCharacterStats CharacterStats;
 	
-	UPROPERTY(EditAnywhere, Category="SaveGame")
-	TSubclassOf<ALevelTransition> LevelTransition;
-	
 	UFUNCTION(BlueprintCallable)
 	void SaveGame(AMain* MainPlayer);
 	UFUNCTION(BlueprintCallable)

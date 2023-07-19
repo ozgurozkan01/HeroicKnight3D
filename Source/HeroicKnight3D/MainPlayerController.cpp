@@ -144,7 +144,6 @@ void AMainPlayerController::SaveGame()
 {
 	if (GameSaveManager)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Saved!"));
 		GameSaveManager->SaveGame(MainPlayer);
 	}
 }
@@ -153,14 +152,12 @@ void AMainPlayerController::LoadGame()
 {
 	if (GameSaveManager)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Loaded!"));
 		GameSaveManager->LoadGame(MainPlayer, true);
 	}
 }
 
 void AMainPlayerController::ResumeGame()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Resume Game!!!"));
 	RemovePauseMenu();
 }
 
