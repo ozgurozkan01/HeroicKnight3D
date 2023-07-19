@@ -10,6 +10,7 @@
 #include "Components/SphereComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "Sound/SoundCue.h"
 
@@ -34,13 +35,15 @@ AEnemy::AEnemy()
 
 	bOverlappingCombatSphere = false;
 	bHasValidTarget = false;
-
+	bInterpToEnemy = false;
+	
 	MaxHealth = 100.f;
 	CurrentHealth = MaxHealth;
 	Damage = 10.f;
 	MinAttackDelayTime = 0.5f;
 	MaxAttackDelayTime = 1.5f;
 	DestroyDelay = 3.f;
+	InterpSpeed = 10.f;
 	
 	EnemyMovementStatus = EEnemyMovementStatus::EMS_Idle;
 }
@@ -75,6 +78,10 @@ void AEnemy::BeginPlay()
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!IsAlive()) { return; }
+
+	InterpRotationToTarget(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -104,6 +111,7 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 
 		if(MainPlayer)
 		{
+			SetInterpToEnemy(false);
 			bHasValidTarget = false;
 			if (MainPlayer->CombatTarget == this)
 			{
@@ -131,6 +139,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 		{
 			MainPlayer->SetCombatTarget(this);
 			MainPlayer->SetHasCombatTarget(true);
+			SetInterpToEnemy(true);
 			bHasValidTarget = true;
 
 			MainPlayer->UpdateCombatTarget();
@@ -349,4 +358,30 @@ void AEnemy::ActivateCombatCollision()
 void AEnemy::DeactivateCombatCollision()
 {
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void AEnemy::InterpRotationToTarget(float& DeltaTime)
+{
+	// this function is making to rotate character to target
+	if (bInterpToEnemy && CombatTarget)
+	{
+		FRotator LookAtYaw = GetInterpRotationYaw(CombatTarget->GetActorLocation());
+		FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), LookAtYaw, DeltaTime, InterpSpeed);
+
+		SetActorRotation(InterpRotation);
+	}
+}
+
+FRotator AEnemy::GetInterpRotationYaw(FVector TargetLocation)
+{
+	// this function is making to return difference of rotation transform between character and target.
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
+	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
+
+	return LookAtRotationYaw;
+}
+
+void AEnemy::SetInterpToEnemy(bool bInterpTo)
+{
+	bInterpToEnemy = bInterpTo;
 }

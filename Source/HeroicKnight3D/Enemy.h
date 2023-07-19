@@ -86,7 +86,8 @@ public:
 	bool bAttacking;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
 	bool bHasValidTarget;
-	
+	bool bInterpToEnemy;
+	float InterpSpeed;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -133,5 +134,9 @@ public:
 	void Die(AActor* Causer);
 	void Disappear();
 	bool IsAlive();
-	
+	void InterpRotationToTarget(float& DeltaTime);
+	FRotator GetInterpRotationYaw(FVector TargetLocation);
+	void SetInterpToEnemy(bool bInterpTo);
+
+
 };	
