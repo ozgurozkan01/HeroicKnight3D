@@ -399,11 +399,11 @@ void AMain::Attack()
 			switch (Section)
 			{
 			case 0:
-				AnimInstance->Montage_Play(CombatMontage, 2.2f);
+				AnimInstance->Montage_Play(CombatMontage, 1.5f);
 				AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
 				break;
 			case 1:
-				AnimInstance->Montage_Play(CombatMontage, 1.8f);
+				AnimInstance->Montage_Play(CombatMontage, 1.3f);
 				AnimInstance->Montage_JumpToSection(FName("Attack_2"), CombatMontage);
 				break;
 			default:
