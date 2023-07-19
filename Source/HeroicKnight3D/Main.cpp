@@ -12,8 +12,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimInstance.h"
-#include "Components/BoxComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Sound/SoundCue.h"
@@ -81,6 +79,11 @@ void AMain::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, DelaySeconds, false);
 	
 	GameSaveManager->LoadGameNoSwitch(this);
+
+	if (MainPlayerController)
+	{
+		MainPlayerController->GameModeOnly();
+	}
 }
 
 // Called every frame

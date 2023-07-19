@@ -77,7 +77,8 @@ public:
 	void ResumeGame();
 	UFUNCTION()
 	void QuitGame();
-	
+	void GameModeOnly();
+
 protected:
   
 	virtual void BeginPlay() override;
