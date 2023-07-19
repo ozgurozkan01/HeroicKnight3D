@@ -77,12 +77,16 @@ void AMain::BeginPlay()
 	MainPlayerController = Cast<AMainPlayerController>(GetController());
 	GameSaveManager = Cast<UGameSaveManager>(UGameplayStatics::CreateSaveGameObject(UGameSaveManager::StaticClass()));
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, DelaySeconds, false);
-	
-	GameSaveManager->LoadGameNoSwitch(this);
 
-	if (MainPlayerController)
+
+	if (!IsPlayerInFirstLevel())
 	{
-		MainPlayerController->GameModeOnly();
+		GameSaveManager->LoadGameNoSwitch(this);
+
+		if (MainPlayerController)
+		{
+			MainPlayerController->GameModeOnly();
+		}	
 	}
 }
 
@@ -504,6 +508,14 @@ bool AMain::CanMove(float InputValue)
 	}
 
 	return false;
+}
+
+bool AMain::IsPlayerInFirstLevel()
+{
+	FString CurrentMapName = GetWorld()->GetMapName();
+	CurrentMapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+	return CurrentMapName == "SunTemple";
 }
 
 void AMain::DeathEnd()

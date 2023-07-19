@@ -56,6 +56,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+	virtual void Jump() override;
 
 	void MoveForward(float InputValue);
 	void MoveRight(float InputValue);
@@ -73,13 +75,15 @@ public:
 	void SetInterpToEnemy(bool bInterpTo);
 	void SetEquippedWeapon(AWeapon* WeaponToSet);
 	void InterpRotationToTarget(float& DeltaTime);
-	FRotator GetInterpRotationYaw(FVector TargetLocation);
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
-	virtual void Jump() override;
-	bool IsAlive();
 	void Die();
 	void UpdateCombatTarget();
+
 	bool CanMove(float InputValue);
+	bool IsPlayerInFirstLevel();
+	bool IsAlive();
+
+	FRotator GetInterpRotationYaw(FVector TargetLocation);
+
 	
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
