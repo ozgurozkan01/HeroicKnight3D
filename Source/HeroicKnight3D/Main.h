@@ -59,8 +59,6 @@ public:
 
 	void MoveForward(float InputValue);
 	void MoveRight(float InputValue);
-	/*void Turn(float InputValue);
-	void LookUp(float InputValue);*/
 	void TurnAtRate(float Rate);
 	void LookUpRate(float Rate);
 	void ShiftKeyDown();
@@ -189,6 +187,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="SaveGame")
 	TSubclassOf<AWeaponStorage> WeaponStorage;
+
+
+	FTimerHandle TimerHandle;
+	float DelaySeconds;
+	
 private:
 
 	UPROPERTY(EditDefaultsOnly, meta=(AllowPrivateAccess = "true"), Category="Camera")

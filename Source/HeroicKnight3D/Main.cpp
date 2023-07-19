@@ -33,9 +33,7 @@ AMain::AMain()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-
-	MouseSensitivity = 65.f;
-
+	
 	// Make independent player rotation of mouse input
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -46,6 +44,7 @@ AMain::AMain()
 	GetCharacterMovement()->JumpZVelocity = 650.f; // Designate jump velocity
 	GetCharacterMovement()->AirControl = 0.1f; // rate of direction control of player in the air
 
+	MouseSensitivity = 65.f;
 	MaxHealth = 100.f;
 	MaxStamina = 350.f;
 	CurrentHealth = MaxHealth;
@@ -56,7 +55,8 @@ AMain::AMain()
 	SprintingSpeed = 1000.f;
 	RunningSpeed = 600.f;
 	InterpSpeed = 10.f;
-
+	DelaySeconds = 0.2f;
+	
 	bShiftKeyDown = false;
 	bLMBDown = false;
 	bAttacking = false;
@@ -78,6 +78,9 @@ void AMain::BeginPlay()
 	// We cast the default controller to the MainPlayerController which we created.
 	MainPlayerController = Cast<AMainPlayerController>(GetController());
 	GameSaveManager = Cast<UGameSaveManager>(UGameplayStatics::CreateSaveGameObject(UGameSaveManager::StaticClass()));
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, DelaySeconds, false);
+	
+	GameSaveManager->LoadGameNoSwitch(this);
 }
 
 // Called every frame
