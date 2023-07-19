@@ -87,8 +87,6 @@ void UGameSaveManager::LoadGame(AMain* MainPlayer, bool bSetTransform)
 		ALevelTransition* LevelTransition = Cast<ALevelTransition>(MainPlayer->GetWorld()->SpawnActor<ALevelTransition>());
 		if (LevelTransition)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Level Transition valid!"));
-			UE_LOG(LogTemp, Warning, TEXT("Loaded TEST!"));
 			FName LevelName(GameSaveManager->CharacterStats.LevelName);
 			LevelTransition->SwitchLevel(LevelName);
 		}
