@@ -54,6 +54,8 @@ AMain::AMain()
 	RunningSpeed = 600.f;
 	InterpSpeed = 10.f;
 	DelaySeconds = 0.2f;
+	FirstAttackAnimationRate = 1.5f;
+	SecondAttackAnimationRate = 1.3f;
 	
 	bShiftKeyDown = false;
 	bLMBDown = false;
@@ -384,6 +386,13 @@ void AMain::IncrementHealth(float TakenPotion)
 	}
 }
 
+void AMain::IncrementAttackSpeed(float AttackSpeedPercent)
+{
+	FirstAttackAnimationRate += FirstAttackAnimationRate * (AttackSpeedPercent / 100.f);
+	SecondAttackAnimationRate += SecondAttackAnimationRate * (AttackSpeedPercent / 100.f);
+}
+
+
 void AMain::Attack()
 {
 	if (!bAttacking && MovementStatus != EMovementStatus::EMS_Dead && !GetMovementComponent()->IsFalling())
@@ -399,11 +408,11 @@ void AMain::Attack()
 			switch (Section)
 			{
 			case 0:
-				AnimInstance->Montage_Play(CombatMontage, 1.5f);
+				AnimInstance->Montage_Play(CombatMontage, FirstAttackAnimationRate);
 				AnimInstance->Montage_JumpToSection(FName("Attack_1"), CombatMontage);
 				break;
 			case 1:
-				AnimInstance->Montage_Play(CombatMontage, 1.3f);
+				AnimInstance->Montage_Play(CombatMontage, SecondAttackAnimationRate);
 				AnimInstance->Montage_JumpToSection(FName("Attack_2"), CombatMontage);
 				break;
 			default:

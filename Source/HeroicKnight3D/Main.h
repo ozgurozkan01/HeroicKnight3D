@@ -95,6 +95,8 @@ public:
 	void IncrementCoin(int32 TakenCoin);
 	UFUNCTION(BlueprintCallable)
 	void IncrementHealth(float TakenPotion);
+	UFUNCTION(BlueprintCallable)
+	void IncrementAttackSpeed(float AttackSpeedPercent);
 
 	
 	FORCEINLINE USpringArmComponent* GetSpringArm() const {return CameraBoom;}
@@ -180,6 +182,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
 	float StaminaDrainRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	float FirstAttackAnimationRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	float SecondAttackAnimationRate;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Combat")
 	FVector CombatTargetLocation;
 	
