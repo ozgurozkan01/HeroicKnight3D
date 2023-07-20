@@ -27,8 +27,17 @@ struct FCharacterStats
 	float MaxStamina;
 
 	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
+	float FirstAttackSpeed;
+
+	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
+	float SecondAttackSpeed;
+	
+	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
 	uint32 Coins; 
 
+	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
+	uint32 KillAmount; 
+	
 	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
 	FVector Location;
 	
@@ -40,6 +49,7 @@ struct FCharacterStats
 
 	UPROPERTY(VisibleAnywhere, Category="SaveGameData")
 	FString LevelName;
+	
 };
 
 UCLASS()

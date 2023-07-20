@@ -23,7 +23,11 @@ void UGameSaveManager::SaveGame(AMain* MainPlayer)
 	GameSaveManager->CharacterStats.Stamina = MainPlayer->CurrentStamina;
 	GameSaveManager->CharacterStats.MaxStamina = MainPlayer->MaxStamina;
 	GameSaveManager->CharacterStats.Coins = MainPlayer->Coin;
-
+	GameSaveManager->CharacterStats.FirstAttackSpeed = MainPlayer->FirstAttackAnimationRate;
+	GameSaveManager->CharacterStats.SecondAttackSpeed = MainPlayer->SecondAttackAnimationRate;
+	GameSaveManager->CharacterStats.KillAmount = MainPlayer->KillAmount;
+	
+	
 	GameSaveManager->CharacterStats.Location = MainPlayer->GetActorLocation();
 	GameSaveManager->CharacterStats.Rotation = MainPlayer->GetActorRotation();
 	
@@ -51,6 +55,9 @@ void UGameSaveManager::LoadGame(AMain* MainPlayer, bool bSetTransform)
 	MainPlayer->CurrentStamina = GameSaveManager->CharacterStats.Stamina;
 	MainPlayer->MaxStamina = GameSaveManager->CharacterStats.MaxStamina;
 	MainPlayer->Coin = GameSaveManager->CharacterStats.Coins;
+	MainPlayer->FirstAttackAnimationRate = GameSaveManager->CharacterStats.FirstAttackSpeed;
+	MainPlayer->SecondAttackAnimationRate = GameSaveManager->CharacterStats.SecondAttackSpeed;
+	MainPlayer->KillAmount = GameSaveManager->CharacterStats.KillAmount;
 	
 	if (MainPlayer->WeaponStorage)
 	{
@@ -103,6 +110,9 @@ void UGameSaveManager::LoadGameNoSwitch(AMain* MainPlayer)
 	MainPlayer->CurrentStamina = GameSaveManager->CharacterStats.Stamina;
 	MainPlayer->MaxStamina = GameSaveManager->CharacterStats.MaxStamina;
 	MainPlayer->Coin = GameSaveManager->CharacterStats.Coins;
+	MainPlayer->FirstAttackAnimationRate = GameSaveManager->CharacterStats.FirstAttackSpeed;
+	MainPlayer->SecondAttackAnimationRate = GameSaveManager->CharacterStats.SecondAttackSpeed;
+	MainPlayer->KillAmount = GameSaveManager->CharacterStats.KillAmount;
 	
 	if (MainPlayer->WeaponStorage)
 	{
@@ -126,5 +136,4 @@ void UGameSaveManager::LoadGameNoSwitch(AMain* MainPlayer)
 	MainPlayer->SetMovementStatus(EMovementStatus::EMS_Normal);
 	MainPlayer->GetMesh()->bPauseAnims = false;
 	MainPlayer->GetMesh()->bNoSkeletonUpdate = false;
-
 }
