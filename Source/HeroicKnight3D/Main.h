@@ -197,12 +197,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SaveGame")
 	UGameSaveManager* GameSaveManager;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="SaveGame")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
 	TSubclassOf<AWeaponStorage> WeaponStorage;
 
-
-	FTimerHandle TimerHandle;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="SaveGame")
 	float DelaySeconds;
+
+	UPROPERTY(EditDefaultsOnly, Category="Combat")
+	uint32 KillAmount;
+	
+	FTimerHandle TimerHandle;
 	
 private:
 

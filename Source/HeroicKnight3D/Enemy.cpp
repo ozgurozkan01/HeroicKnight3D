@@ -312,10 +312,11 @@ void AEnemy::Die(AActor* Causer)
 	if (Causer)
 	{
 		AMain* MainPlayer = Cast<AMain>(Causer);
-
+		
 		if (MainPlayer)
 		{
 			MainPlayer->UpdateCombatTarget();
+			MainPlayer->KillAmount++;
 		}
 	}
 }

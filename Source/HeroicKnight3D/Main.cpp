@@ -56,6 +56,7 @@ AMain::AMain()
 	DelaySeconds = 0.2f;
 	FirstAttackAnimationRate = 1.5f;
 	SecondAttackAnimationRate = 1.3f;
+	KillAmount = 0;
 	
 	bShiftKeyDown = false;
 	bLMBDown = false;
