@@ -48,6 +48,7 @@ AMain::AMain()
 	CurrentHealth = MaxHealth;
 	CurrentStamina = MaxStamina;
 	Coin = 0;
+	KillAmount = 0;
 	StaminaDrainRate = 25.f;
 	MinSprintStamina = 100.f;
 	SprintingSpeed = 1000.f;
@@ -56,7 +57,6 @@ AMain::AMain()
 	DelaySeconds = 0.2f;
 	FirstAttackAnimationRate = 1.5f;
 	SecondAttackAnimationRate = 1.3f;
-	KillAmount = 0;
 	
 	bShiftKeyDown = false;
 	bLMBDown = false;
@@ -583,7 +583,10 @@ float AMain::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACo
         {
             AEnemy* Enemy = Cast<AEnemy>(DamageCauser);
 
-            Enemy->bHasValidTarget = false;
+            if (Enemy)
+            {
+            	Enemy->bHasValidTarget = false;
+            }
         }
     }
 	

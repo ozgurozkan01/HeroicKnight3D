@@ -106,7 +106,7 @@ public:
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus CurrentStatus) { StaminaStatus = CurrentStatus; }
 	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
 	FORCEINLINE void SetHasCombatTarget(bool HasCombatTarget) { bHasCombatTarget = HasCombatTarget; }
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Stats")
 	float MaxHealth;
 
@@ -203,8 +203,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="SaveGame")
 	float DelaySeconds;
 
-	UPROPERTY(EditDefaultsOnly, Category="Combat")
-	uint32 KillAmount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
+	int32 KillAmount;
 	
 	FTimerHandle TimerHandle;
 	
