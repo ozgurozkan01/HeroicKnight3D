@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "Main.h"
 #include "MainPlayerController.h"
+#include "Weapon.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
@@ -311,12 +312,17 @@ void AEnemy::Die(AActor* Causer)
 
 	if (Causer)
 	{
-		AMain* MainPlayer = Cast<AMain>(Causer);
+		AWeapon* Weapon = Cast<AWeapon>(Causer);
 		
-		if (MainPlayer)
+		if (Weapon)
 		{
-			MainPlayer->UpdateCombatTarget();
-			MainPlayer->KillAmount++;
+			AMain* MainParent = Cast<AMain>(Weapon->GetAttachParentActor());
+
+			if (MainParent)
+			{
+				MainParent->UpdateCombatTarget();
+				MainParent->KillAmount++;
+			}
 		}
 	}
 }
