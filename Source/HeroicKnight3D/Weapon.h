@@ -45,6 +45,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
 	float Damage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
+	int32 CoinAmountToAttach;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Combat")
+	int32 KillAmountToAttach;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Items | Sound")
 	USoundCue* SwingSound;
 
@@ -80,5 +86,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeactivateCombatCollision();
 	void WeaponAttach(AMain* MainPlayer);
-	
+	bool CanAttachWeapon(AMain* MainPlayer);
 };

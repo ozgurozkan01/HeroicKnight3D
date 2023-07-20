@@ -23,6 +23,9 @@ AWeapon::AWeapon()
 
 	WeaponState = EWeaponState::EWS_PickUp;
 	Damage = 25.f;
+
+	CoinAmountToAttach = 0;
+	KillAmountToAttach = 0;
 }
 
 void AWeapon::BeginPlay()
@@ -116,6 +119,8 @@ void AWeapon::WeaponAttach(AMain* MainPlayer)
 {
 	if (MainPlayer == nullptr) { return; }
 
+	if (!CanAttachWeapon(MainPlayer)) { return; }
+	
 	SetInstegator(MainPlayer->GetController());
 	// We made ignore to responses of these channels
 	// Because, Otherwise weapon keeps going to collide every time
@@ -149,4 +154,9 @@ void AWeapon::WeaponAttach(AMain* MainPlayer)
 	{
 		IdleParticle->Deactivate();
 	}
+}
+
+bool AWeapon::CanAttachWeapon(AMain* MainPlayer)
+{
+	return MainPlayer->Coin == CoinAmountToAttach && MainPlayer->KillAmount == KillAmountToAttach;
 }
